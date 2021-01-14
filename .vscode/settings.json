@@ -1,0 +1,7 @@
+{
+    "terminal.integrated.shellArgs.windows": [
+        "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+        "-NoExit",
+        "Set-ExecutionPolicy Unrestricted -Scope Process"
+    ]
+}
