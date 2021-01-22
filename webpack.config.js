@@ -1,25 +1,27 @@
+
 var path = require('path');
 var webpack = require('webpack');
 var vtkRules = require('vtk.js/Utilities/config/dependency.js').webpack.core.rules;
 
 // Optional if you want to load *.css and *.module.css files
-//var cssRules = require('vtk.js/Utilities/config/dependency.js').webpack.css.rules;
+// var cssRules = require('vtk.js/Utilities/config/dependency.js').webpack.css.rules;
 
-var entry = path.join(__dirname, './src/index.js');
+var entry = path.join(__dirname, './src/index.html');
 const sourcePath = path.join(__dirname, './src');
 const outputPath = path.join(__dirname, './dist');
 
 module.exports = {
-  entry,
+  entry: {
+    polyfills: 'src/polyfills.ts',
+    main: './src/main.ts'
+  },
   output: {
     path: outputPath,
     filename: 'MyWebApp.js',
   },
   module: {
     rules: [
-		{ test: entry, loader: "expose-loader?MyWebApp" },
-    { test: /\.html$/, loader: 'html-loader' },
-		{ test: /\.glsl$/i, loader: 'shader-loader' },
+        { test: /\.html$/, loader: 'html-loader' },
     ].concat(vtkRules),
   },
   resolve: {
@@ -29,3 +31,12 @@ module.exports = {
     ],
   },
 };
+
+/* const webpack = require('webpack');
+const vtkRules = require('vtk.js/Utilities/config/dependency').webpack;
+
+module.exports = {
+  module: {
+    rules: vtkRules.core.rules,
+  },
+}; */
