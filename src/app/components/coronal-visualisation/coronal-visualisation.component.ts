@@ -17,7 +17,7 @@ export class CoronalVisualisationComponent implements OnInit{
   coronalRenderWindow = null;
   coronalRenderer = null;
 
-  @ViewChild('content', {read: ElementRef}) content: ElementRef;
+  @ViewChild('coronalDiv', {read: ElementRef}) coronalDiv: ElementRef;
 
   constructor() { }
 
@@ -40,12 +40,12 @@ export class CoronalVisualisationComponent implements OnInit{
     const openglRenderWindow = vtkOpenGLRenderWindow.newInstance();
     renderWindow.addView(openglRenderWindow);
 
-    openglRenderWindow.setContainer(this.content.nativeElement);
+    openglRenderWindow.setContainer(this.coronalDiv.nativeElement);
 
     // ----------------------------------------------------------------------------
     // Capture size of the container and set it to the renderWindow
     // ----------------------------------------------------------------------------
-    const { width, height } = this.content.nativeElement.getBoundingClientRect();
+    const { width, height } = this.coronalDiv.nativeElement.getBoundingClientRect();
     openglRenderWindow.setSize(width, height);
 
     // ----------------------------------------------------------------------------
@@ -54,7 +54,7 @@ export class CoronalVisualisationComponent implements OnInit{
     const interactor = vtkRenderWindowInteractor.newInstance();
     interactor.setView(openglRenderWindow);
     interactor.initialize();
-    interactor.bindEvents(this.content.nativeElement);
+    interactor.bindEvents(this.coronalDiv.nativeElement);
   }
 
 }
