@@ -15,7 +15,7 @@ export class CoronalVisualisationComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
-    this.coronalRenderWindow = vtkFullScreenRenderWindow.newInstance();
+    this.coronalRenderWindow = vtkRenderWindow.newInstance();
   }
 
 }
