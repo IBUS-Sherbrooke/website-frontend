@@ -1,8 +1,9 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-
+import { HttpClientModule } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { FileUploadComponent } from '../file-upload/file-upload.component';
 
 import { CoronalVisualisationComponent } from '../components/coronal-visualisation/coronal-visualisation.component';
 import { SagittalVisualisationComponent } from '../components/sagittal-visualisation/sagittal-visualisation.component';
@@ -12,6 +13,7 @@ import { TridimensionalVisualisationComponent } from '../components/tridimension
 @NgModule({
   declarations: [
     AppComponent,
+    FileUploadComponent,
     CoronalVisualisationComponent,
     SagittalVisualisationComponent,
     TransverseVisualisationComponent,
@@ -19,7 +21,8 @@ import { TridimensionalVisualisationComponent } from '../components/tridimension
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    HttpClientModule 
   ],
   providers: [],
   bootstrap: [AppComponent]
