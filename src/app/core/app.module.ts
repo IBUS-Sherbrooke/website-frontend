@@ -9,6 +9,7 @@ import { CoronalVisualisationComponent } from '../components/coronal-visualisati
 import { SagittalVisualisationComponent } from '../components/sagittal-visualisation/sagittal-visualisation.component';
 import { TransverseVisualisationComponent } from '../components/transverse-visualisation/transverse-visualisation.component';
 import { TridimensionalVisualisationComponent } from '../components/tridimensional-visualisation/tridimensional-visualisation.component';
+import { ItkTestComponent } from '../components/itk-test/itk-test.component';
 
 @NgModule({
   declarations: [
@@ -17,7 +18,8 @@ import { TridimensionalVisualisationComponent } from '../components/tridimension
     CoronalVisualisationComponent,
     SagittalVisualisationComponent,
     TransverseVisualisationComponent,
-    TridimensionalVisualisationComponent
+    TridimensionalVisualisationComponent,
+    ItkTestComponent,
   ],
   imports: [
     BrowserModule,
