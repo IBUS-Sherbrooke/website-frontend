@@ -3,7 +3,7 @@ import { NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { FileUploadComponent } from '../file-upload/file-upload.component';
+import { FileUploadComponent } from '../components/file-upload/file-upload.component';
 
 import { CoronalVisualisationComponent } from '../components/coronal-visualisation/coronal-visualisation.component';
 import { SagittalVisualisationComponent } from '../components/sagittal-visualisation/sagittal-visualisation.component';

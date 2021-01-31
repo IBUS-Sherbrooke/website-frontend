@@ -14,16 +14,15 @@ export class FileDbUploadService {
     return throwError(error.message || 'server Error');
   }
   postFile(fileToUpload: File): Observable<any> {
-    let httphead:HttpHeaders = new HttpHeaders()
-    httphead.append('Access-Control-Allow-Origin',  '*');
-    httphead.append('responseType', 'text');
-    const endpoint = 'https://webhook.site/fb9ed0fd-0ef7-489b-8b18-5d298e95664e';
+    //Adresse du serveur
+    const endpoint = 'http://localhost:2000';
     const formData: FormData = new FormData();
+    //on met le contenu du fichier dans form data avec son nom
     formData.append('fileKey', fileToUpload, fileToUpload.name);
     return this.httpClient
-      .post(endpoint, formData, {headers: new HttpHeaders({
-        'responseType': 'text',
-        'Access-Control-Allow-Origin': '*',
+      .post(endpoint, formData, {
+        headers: new HttpHeaders({
+        'Content-Type': 'multipart/form-data' // definition des parametre du header http ici
       })},) 
       .pipe(map(() => { return true; }))
       .pipe(catchError(this.errorHandler));
