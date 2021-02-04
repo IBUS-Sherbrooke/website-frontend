@@ -15,7 +15,7 @@ export class FileDbUploadService {
   }
   postFile(fileToUpload: File): Observable<any> {
     //Adresse du serveur
-    const endpoint = 'http://localhost:2000';
+    const endpoint = 'http://localhost:2000/api/printRequests';
     const formData: FormData = new FormData();
     //on met le contenu du fichier dans form data avec son nom
     formData.append('fileKey', fileToUpload, fileToUpload.name);
