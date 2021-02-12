@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 
 import vtkFullScreenRenderWindow from 'vtk.js/Sources/Rendering/Misc/FullScreenRenderWindow';
-import vtkConeSource from 'vtk.js/Sources/Filters/Sources/ConeSource';
 import vtkActor from 'vtk.js/Sources/Rendering/Core/Actor';
-import vtkMapper from 'vtk.js/Sources/Rendering/Core/Mapper';
-import convertItkToVtkImage from "vtk.js/Sources/Common/DataModel/ITKHelper";
+import vtkImageMapper from 'vtk.js/Sources/Rendering/Core/ImageMapper';
+import ITKHelper from "vtk.js/Sources/Common/DataModel/ITKHelper";
 import readImageDICOMFileSeries from 'itk/readImageDICOMFileSeries';
+import vtkVolume from 'vtk.js/Sources/Rendering/Core/Volume';
+import vtkVolumeMapper from 'vtk.js/Sources/Rendering/Core/VolumeMapper';
 
 
 @Component({
@@ -27,19 +28,24 @@ export class ItkTestComponent implements OnInit {
 
   load() {
     this.fullscreenRenderWindow = vtkFullScreenRenderWindow.newInstance();
-    readImageDICOMFileSeries(null, this.fileToUpload).then(function({ image, webWorker }) {
-        webWorker.terminate();
-        const actor = vtkActor.newInstance();
-        const mapper = vtkMapper.newInstance();
-        const cone = convertItkToVtkImage(image)
+    readImageDICOMFileSeries(this.fileToUpload).then((image, webWorker) => {
+        //webWorker.terminate();
+        console.log(image);
+        console.log(image.image);
+        console.log(this);
+        const actor = vtkVolume.newInstance();
+        const mapper = vtkVolumeMapper.newInstance();
+        const imageData = ITKHelper.convertItkToVtkImage(image.image)
+        console.log(imageData);
+        mapper.setInputData(imageData);
         actor.setMapper(mapper);
-        mapper.setInputConnection(cone.getOutputPort());
-    
+
         const renderer = this.fullscreenRenderWindow.getRenderer();
-        renderer.addActor(actor);
+        renderer.addVolume(actor);
         renderer.resetCamera();
     
         const renderWindow = this.fullscreenRenderWindow.getRenderWindow();
+        console.log(renderWindow);
         renderWindow.render();
     });
   }
