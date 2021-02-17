@@ -9,6 +9,7 @@ import { CoronalVisualisationComponent } from '../components/coronal-visualisati
 import { SagittalVisualisationComponent } from '../components/sagittal-visualisation/sagittal-visualisation.component';
 import { TransverseVisualisationComponent } from '../components/transverse-visualisation/transverse-visualisation.component';
 import { TridimensionalVisualisationComponent } from '../components/tridimensional-visualisation/tridimensional-visualisation.component';
+import { ItkTestComponent } from '../components/itk-test/itk-test.component';
 import { SampleGetRequestComponent } from '../components/sample-get-request/sample-get-request.component';
 
 @NgModule({
@@ -19,6 +20,7 @@ import { SampleGetRequestComponent } from '../components/sample-get-request/samp
     SagittalVisualisationComponent,
     TransverseVisualisationComponent,
     TridimensionalVisualisationComponent,
+    ItkTestComponent,
     SampleGetRequestComponent
   ],
   imports: [
