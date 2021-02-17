@@ -10,6 +10,7 @@ import { SagittalVisualisationComponent } from '../components/sagittal-visualisa
 import { TransverseVisualisationComponent } from '../components/transverse-visualisation/transverse-visualisation.component';
 import { TridimensionalVisualisationComponent } from '../components/tridimensional-visualisation/tridimensional-visualisation.component';
 import { ItkTestComponent } from '../components/itk-test/itk-test.component';
+import { SampleGetRequestComponent } from '../components/sample-get-request/sample-get-request.component';
 
 @NgModule({
   declarations: [
@@ -20,6 +21,7 @@ import { ItkTestComponent } from '../components/itk-test/itk-test.component';
     TransverseVisualisationComponent,
     TridimensionalVisualisationComponent,
     ItkTestComponent,
+    SampleGetRequestComponent
   ],
   imports: [
     BrowserModule,

@@ -22,6 +22,7 @@ export class FileUploadComponent implements OnInit {
 uploadFileToActivity() {
   //Fonction servant à envoyer une requête post vers le serveur
     this.service.postFile(this.fileToUpload).subscribe(data => {
+      console.log(data)
       console.log("Post_Success!")
       }, error => {
         console.log(error);

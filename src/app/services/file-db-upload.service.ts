@@ -15,16 +15,16 @@ export class FileDbUploadService {
   }
   postFile(fileToUpload: File): Observable<any> {
     //Adresse du serveur
-    const endpoint = 'http://localhost:2000';
+    const endpoint = 'http://localhost:2000/api/printRequests';
     const formData: FormData = new FormData();
     //on met le contenu du fichier dans form data avec son nom
-    formData.append('fileKey', fileToUpload, fileToUpload.name);
+    formData.append('print_data', fileToUpload);
+    formData.append('name', fileToUpload.name);
+    //va falloir update ses valeurs dependant 
+    formData.append('user_id', '1');
+    formData.append('project_name', 'project1');
     return this.httpClient
-      .post(endpoint, formData, {
-        headers: new HttpHeaders({
-        'Content-Type': 'multipart/form-data' // definition des parametre du header http ici
-      })},) 
-      .pipe(map(() => { return true; }))
+      .post(endpoint, formData, {responseType: 'text'}) 
       .pipe(catchError(this.errorHandler));
 
 }
