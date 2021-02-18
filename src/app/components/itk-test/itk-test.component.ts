@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
+import { VisualisationDataService } from "../../services/visualisation-Data/visualisation-data.service";
 import vtkFullScreenRenderWindow from 'vtk.js/Sources/Rendering/Misc/FullScreenRenderWindow';
 import vtkActor from 'vtk.js/Sources/Rendering/Core/Actor';
 import vtkImageMapper from 'vtk.js/Sources/Rendering/Core/ImageMapper';
@@ -19,37 +20,13 @@ export class ItkTestComponent implements OnInit {
   fullscreenRenderWindow = null;
   fileToUpload = null;
 
-  constructor() { }
+  constructor(private visualisationDataService: VisualisationDataService) { }
+  
+  ngOnInit(): void {
+  }
 
   handleFileInput(files: FileList) {
     this.fileToUpload = files;
-    this.load();
-  }
-
-  load() {
-    this.fullscreenRenderWindow = vtkFullScreenRenderWindow.newInstance();
-    readImageDICOMFileSeries(this.fileToUpload).then((image, webWorker) => {
-        //webWorker.terminate();
-        console.log(image);
-        console.log(image.image);
-        console.log(this);
-        const actor = vtkVolume.newInstance();
-        const mapper = vtkVolumeMapper.newInstance();
-        const imageData = ITKHelper.convertItkToVtkImage(image.image)
-        console.log(imageData);
-        mapper.setInputData(imageData);
-        actor.setMapper(mapper);
-
-        const renderer = this.fullscreenRenderWindow.getRenderer();
-        renderer.addVolume(actor);
-        renderer.resetCamera();
-    
-        const renderWindow = this.fullscreenRenderWindow.getRenderWindow();
-        console.log(renderWindow);
-        renderWindow.render();
-    });
-  }
-  
-  ngOnInit(): void {
+    this.visualisationDataService.load(this.fileToUpload);
   }
 }

@@ -1,5 +1,7 @@
 import { ViewChild, ElementRef, Component, OnInit } from '@angular/core';
 
+import { VisualisationDataService } from "../../services/visualisation-Data/visualisation-data.service";
+
 import vtkActor from 'vtk.js/Sources/Rendering/Core/Actor';
 import vtkMapper from 'vtk.js/Sources/Rendering/Core/Mapper';
 import vtkOpenGLRenderWindow from 'vtk.js/Sources/Rendering/OpenGL/RenderWindow';
@@ -19,7 +21,7 @@ export class TransverseVisualisationComponent implements OnInit {
 
   @ViewChild('transverseDiv', {read: ElementRef}) transverseDiv: ElementRef;
 
-  constructor() { }
+  constructor(private visualisationDataService: VisualisationDataService) { }
 
   ngOnInit(): void {
   }
