@@ -2,12 +2,19 @@ import { ViewChild, ElementRef, Component, OnInit } from '@angular/core';
 
 import { VisualisationDataService } from "../../services/visualisation-Data/visualisation-data.service";
 
-import vtkActor from 'vtk.js/Sources/Rendering/Core/Actor';
-import vtkMapper from 'vtk.js/Sources/Rendering/Core/Mapper';
+import vtkImageMapper from 'vtk.js/Sources/Rendering/Core/ImageMapper';
+import vtkImageSlice from 'vtk.js/Sources/Rendering/Core/ImageSlice';
 import vtkOpenGLRenderWindow from 'vtk.js/Sources/Rendering/OpenGL/RenderWindow';
 import vtkRenderWindow from 'vtk.js/Sources/Rendering/Core/RenderWindow';
 import vtkRenderWindowInteractor from 'vtk.js/Sources/Rendering/Core/RenderWindowInteractor';
+import vtkInteractorStyleImage from 'vtk.js/Sources/Interaction/Style/InteractorStyleImage';
+import vtkInteractorStyleTrackballCamera from 'vtk.js/Sources/Interaction/Style/InteractorStyleTrackballCamera';
 import vtkRenderer from 'vtk.js/Sources/Rendering/Core/Renderer';
+import Constants from 'vtk.js/Sources/Rendering/Core/ImageMapper/Constants';
+
+import { Subscription } from 'rxjs';
+
+const { SlicingMode } = Constants;
 
 @Component({
   selector: 'app-transverse-visualisation',
@@ -16,8 +23,16 @@ import vtkRenderer from 'vtk.js/Sources/Rendering/Core/Renderer';
 })
 export class TransverseVisualisationComponent implements OnInit {
 
-  sagitallRenderWindow = null;
-  sagitallRenderer = null;
+  // VTK attributes
+  renderWindow: any;
+  renderer: any;
+  camera: any
+  interactor: any;
+  actor: any;
+  mapper: any;
+  openglRenderWindow: any;
+
+  subscription: Subscription;
 
   @ViewChild('transverseDiv', {read: ElementRef}) transverseDiv: ElementRef;
 
@@ -27,34 +42,53 @@ export class TransverseVisualisationComponent implements OnInit {
   }
 
   ngAfterViewInit(): void {
-    const renderWindow = vtkRenderWindow.newInstance();
-    const renderer = vtkRenderer.newInstance({ background: [0, 0, 0] });
-    renderWindow.addRenderer(renderer);
+    this.initializeView();
+    this.subscription = this.visualisationDataService.getData()
+      .subscribe(imageData => {
+        this.mapper.setInputData(imageData);
+        this.renderer.resetCamera();
+        this.renderWindow.render();
+      }),
+      error => {
+        console.log(error);
+      }
+  }
 
-    const mapper = vtkMapper.newInstance();
-    const actor = vtkActor.newInstance();
+  initializeView() {
+    this.renderWindow = vtkRenderWindow.newInstance();
+    this.renderer = vtkRenderer.newInstance({ background: [0, 0, 0] });
+    this.renderWindow.addRenderer(this.renderer);
 
-    actor.setMapper(mapper);
-    renderer.addActor(actor);
-    renderer.resetCamera();
+    this.mapper = vtkImageMapper.newInstance();
+    this.mapper.setZSlice(100);
+    
+    this.actor = vtkImageSlice.newInstance();
+    this.actor.setMapper(this.mapper);
+    this.renderer.addActor(this.actor);
+    this.camera = this.renderer.getActiveCamera();
+    this.camera.setViewUp([0, 1, 0]);
 
-    const openglRenderWindow = vtkOpenGLRenderWindow.newInstance();
-    renderWindow.addView(openglRenderWindow);
+    this.openglRenderWindow = vtkOpenGLRenderWindow.newInstance();
+    this.renderWindow.addView(this.openglRenderWindow);
 
-    openglRenderWindow.setContainer(this.transverseDiv.nativeElement);
+    this.openglRenderWindow.setContainer(this.transverseDiv.nativeElement);
 
     // ----------------------------------------------------------------------------
     // Capture size of the container and set it to the renderWindow
     // ----------------------------------------------------------------------------
     const { width, height } = this.transverseDiv.nativeElement.getBoundingClientRect();
-    openglRenderWindow.setSize(width, height);
+    this.openglRenderWindow.setSize(width, height);
 
     // ----------------------------------------------------------------------------
     // Setup an interactor to handle mouse events
     // ----------------------------------------------------------------------------
-    const interactor = vtkRenderWindowInteractor.newInstance();
-    interactor.setView(openglRenderWindow);
-    interactor.initialize();
-    interactor.bindEvents(this.transverseDiv.nativeElement);
+    this.interactor = vtkRenderWindowInteractor.newInstance();
+    this.interactor.setView(this.openglRenderWindow);
+    this.interactor.initialize();
+    this.interactor.bindEvents(this.transverseDiv.nativeElement);
+
+    //this.interactor.setInteractionMode("IMAGE_SLICING");
+    //this.interactor.setInteractorStyle(vtkInteractorStyleImage.newInstance("IMAGE_SLICING"));
+    this.interactor.setInteractorStyle(vtkInteractorStyleTrackballCamera.newInstance());
   }
 }
