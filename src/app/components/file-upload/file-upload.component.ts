@@ -24,13 +24,19 @@ uploadFileToActivity() {
   //Fonction servant à envoyer une requête post vers le serveur
     this.service.postFile(this.fileToUpload).subscribe(data => {
       console.log(data)
-      let json_data=JSON.parse(data)
-      this.return_message = "Le fichier " + json_data.name +
-                            " a ete upload au serveur sans probleme, sous le projet: " +
-                            json_data.project_name+ " avec le user id: " +json_data.user_id
-      console.log(this.return_message)
-      console.log("Post_Success!")
-      }, error => {
+      try {
+        let json_data=JSON.parse(data)
+        this.return_message = "Le fichier " + json_data.name +
+                              " a ete upload au serveur sans probleme, sous le projet: " +
+                              json_data.project_name+ " avec le user id: " +json_data.user_id
+        console.log(this.return_message)
+        console.log("Post_Success!")
+      }
+      catch(err) {
+        this.return_message=data
+      
+      }}
+      , error => {
         console.log(error);
       });
   }
