@@ -20,7 +20,7 @@ export class FileDbUploadService {
     //on met le contenu du fichier dans form data avec son nom
     formData.append('print_data', fileToUpload);
     formData.append('name', fileToUpload.name);
-    //va falloir update ses valeurs dependant 
+    //va falloir update ses valeurs dependant de l'utilisateur
     formData.append('user_id', '1');
     formData.append('project_name', 'project1');
     return this.httpClient

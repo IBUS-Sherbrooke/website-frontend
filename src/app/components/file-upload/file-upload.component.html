@@ -1,6 +1,7 @@
 <div class="form-group">
-    <label for="file">Choose File</label>
+    <label for="file">Upload le fichier au serveur pour l'imprimer &nbsp;   </label>
     <input type="file"
            id="file"
            (change)="handleFileInput($event.target.files)">
 </div>
+<p>{{return_message}}</p>
