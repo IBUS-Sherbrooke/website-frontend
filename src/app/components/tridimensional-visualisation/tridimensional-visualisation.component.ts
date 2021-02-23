@@ -1,11 +1,18 @@
 import { ViewChild, ElementRef, Component, OnInit } from '@angular/core';
 
-import vtkActor from 'vtk.js/Sources/Rendering/Core/Actor';
-import vtkMapper from 'vtk.js/Sources/Rendering/Core/Mapper';
+import { VisualisationDataService } from "../../services/visualisation-Data/visualisation-data.service";
+
 import vtkOpenGLRenderWindow from 'vtk.js/Sources/Rendering/OpenGL/RenderWindow';
 import vtkRenderWindow from 'vtk.js/Sources/Rendering/Core/RenderWindow';
 import vtkRenderWindowInteractor from 'vtk.js/Sources/Rendering/Core/RenderWindowInteractor';
 import vtkRenderer from 'vtk.js/Sources/Rendering/Core/Renderer';
+import vtkInteractorStyleTrackballCamera from 'vtk.js/Sources/Interaction/Style/InteractorStyleTrackballCamera';
+import vtkVolume from 'vtk.js/Sources/Rendering/Core/Volume';
+import vtkVolumeMapper from 'vtk.js/Sources/Rendering/Core/VolumeMapper';
+import vtkPiecewiseFunction from 'vtk.js/Sources/Common/DataModel/PiecewiseFunction';
+import vtkColorTransferFunction from 'vtk.js/Sources/Rendering/Core/ColorTransferFunction';
+
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-tridimensional-visualisation',
@@ -14,46 +21,92 @@ import vtkRenderer from 'vtk.js/Sources/Rendering/Core/Renderer';
 })
 export class TridimensionalVisualisationComponent implements OnInit {
 
-  sagitallRenderWindow = null;
-  sagitallRenderer = null;
+  // VTK attributes
+  renderWindow: any;
+  renderer: any;
+  camera: any;
+  interactor: any;
+  actor: any;
+  mapper: any;
+  openglRenderWindow: any;
+
+  subscription: Subscription;
 
   @ViewChild('tridimensionalDiv', {read: ElementRef}) tridimensionalDiv: ElementRef;
 
-  constructor() { }
+  constructor(private visualisationDataService: VisualisationDataService) { }
 
   ngOnInit(): void {
   }
 
   ngAfterViewInit(): void {
-    const renderWindow = vtkRenderWindow.newInstance();
-    const renderer = vtkRenderer.newInstance({ background: [0, 0, 0] });
-    renderWindow.addRenderer(renderer);
+    this.initializeView();
+    this.subscription = this.visualisationDataService.getData()
+      .subscribe(imageData => {
+        this.mapper.setInputData(imageData);
+        this.renderer.resetCamera();
+        this.renderWindow.render();
+        console.log("camera" + this.camera.getPosition());
+      }),
+      error => {
+        console.log(error);
+      }
+  }
 
-    const mapper = vtkMapper.newInstance();
-    const actor = vtkActor.newInstance();
+  initializeView() {
+    this.renderWindow = vtkRenderWindow.newInstance();
+    this.renderer = vtkRenderer.newInstance({ background: [0.5, 0.5, 0.5] });
+    this.renderWindow.addRenderer(this.renderer);
 
-    actor.setMapper(mapper);
-    renderer.addActor(actor);
-    renderer.resetCamera();
+    this.camera = this.renderer.getActiveCamera();
 
-    const openglRenderWindow = vtkOpenGLRenderWindow.newInstance();
-    renderWindow.addView(openglRenderWindow);
+    this.mapper = vtkVolumeMapper.newInstance();
+    this.actor = vtkVolume.newInstance();
+    
+    this.actor.setMapper(this.mapper);
+    this.renderer.addVolume(this.actor);
+    this.renderer.resetCamera();
+    this.camera.pitch(90);
+  
+    const ctfun = vtkColorTransferFunction.newInstance();
+    ctfun.addRGBPoint(0, 85 / 255.0, 0, 0);
+    ctfun.addRGBPoint(95, 1.0, 1.0, 1.0);
+    ctfun.addRGBPoint(225, 0.66, 0.66, 0.5);
+    ctfun.addRGBPoint(255, 0.3, 1.0, 0.5);
+    const ofun = vtkPiecewiseFunction.newInstance();
+    ofun.addPoint(0.0, 0.0);
+    ofun.addPoint(255.0, 1.0);
+    this.actor.getProperty().setRGBTransferFunction(0, ctfun);
+    this.actor.getProperty().setScalarOpacity(0, ofun);
+    this.actor.getProperty().setScalarOpacityUnitDistance(0, 3.0);
+    this.actor.getProperty().setInterpolationTypeToLinear();
+    this.actor.getProperty().setUseGradientOpacity(0, true);
+    this.actor.getProperty().setGradientOpacityMinimumValue(0, 2);
+    this.actor.getProperty().setGradientOpacityMinimumOpacity(0, 0.0);
+    this.actor.getProperty().setGradientOpacityMaximumValue(0, 20);
+    this.actor.getProperty().setGradientOpacityMaximumOpacity(0, 1.0);
+    this.actor.getProperty().setShade(true);
+    this.actor.getProperty().setAmbient(0.2);
+    this.actor.getProperty().setDiffuse(0.7);
+    this.actor.getProperty().setSpecular(0.3);
+    this.actor.getProperty().setSpecularPower(8.0);
 
-    openglRenderWindow.setContainer(this.tridimensionalDiv.nativeElement);
+    this.openglRenderWindow = vtkOpenGLRenderWindow.newInstance();
+    this.renderWindow.addView(this.openglRenderWindow);
 
-    // ----------------------------------------------------------------------------
+    this.openglRenderWindow.setContainer(this.tridimensionalDiv.nativeElement);
+
     // Capture size of the container and set it to the renderWindow
-    // ----------------------------------------------------------------------------
     const { width, height } = this.tridimensionalDiv.nativeElement.getBoundingClientRect();
-    openglRenderWindow.setSize(width, height);
+    this.openglRenderWindow.setSize(width, height);
 
-    // ----------------------------------------------------------------------------
     // Setup an interactor to handle mouse events
-    // ----------------------------------------------------------------------------
-    const interactor = vtkRenderWindowInteractor.newInstance();
-    interactor.setView(openglRenderWindow);
-    interactor.initialize();
-    interactor.bindEvents(this.tridimensionalDiv.nativeElement);
+    this.interactor = vtkRenderWindowInteractor.newInstance();
+    this.interactor.setView(this.openglRenderWindow);
+    this.interactor.initialize();
+    this.interactor.bindEvents(this.tridimensionalDiv.nativeElement);
+
+    this.interactor.setInteractorStyle(vtkInteractorStyleTrackballCamera.newInstance());
   }
 }
 
