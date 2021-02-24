@@ -69,13 +69,16 @@ export class TridimensionalVisualisationComponent implements OnInit {
     this.camera.pitch(90);
   
     const ctfun = vtkColorTransferFunction.newInstance();
-    ctfun.addRGBPoint(0, 85 / 255.0, 0, 0);
-    ctfun.addRGBPoint(95, 1.0, 1.0, 1.0);
-    ctfun.addRGBPoint(225, 0.66, 0.66, 0.5);
-    ctfun.addRGBPoint(255, 0.3, 1.0, 0.5);
+    ctfun.addRGBPoint(-1000, 0.3, 0.3, 1);
+    ctfun.addRGBPoint(-488, 0.3, 1, 0.3);
+    ctfun.addRGBPoint(463.28, 1, 0, 0);
+    ctfun.addRGBPoint(659.15, 1, 0.912535, 0.0374849);
+    ctfun.addRGBPoint(953, 1, 0.3, 0.3);
     const ofun = vtkPiecewiseFunction.newInstance();
-    ofun.addPoint(0.0, 0.0);
-    ofun.addPoint(255.0, 1.0);
+    ofun.addPoint(-1000, 0);
+    ofun.addPoint(152.19, 0);
+    ofun.addPoint(278.93, 0.190476);
+    ofun.addPoint(952, 0.2);
     this.actor.getProperty().setRGBTransferFunction(0, ctfun);
     this.actor.getProperty().setScalarOpacity(0, ofun);
     this.actor.getProperty().setScalarOpacityUnitDistance(0, 3.0);
