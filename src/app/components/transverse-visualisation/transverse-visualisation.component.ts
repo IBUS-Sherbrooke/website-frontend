@@ -11,6 +11,9 @@ import vtkInteractorStyleImage from 'vtk.js/Sources/Interaction/Style/Interactor
 import vtkRenderer from 'vtk.js/Sources/Rendering/Core/Renderer';
 import Constants from 'vtk.js/Sources/Rendering/Core/ImageMapper/Constants';
 
+import vtkOrientationMarkerWidget from 'vtk.js/Sources/Interaction/Widgets/OrientationMarkerWidget';
+import vtkAxesActor from 'vtk.js/Sources/Rendering/Core/AxesActor';
+
 import { Subscription } from 'rxjs';
 
 const { SlicingMode } = Constants;
@@ -44,6 +47,7 @@ export class TransverseVisualisationComponent implements OnInit {
     this.initializeView();
     this.subscription = this.visualisationDataService.getData()
       .subscribe(imageData => {
+        this.orientationMarker();
         this.mapper.setInputData(imageData);
         this.renderer.resetCamera();
         this.renderWindow.render();
@@ -90,5 +94,20 @@ export class TransverseVisualisationComponent implements OnInit {
     const iStyle = vtkInteractorStyleImage.newInstance();
     iStyle.setInteractionMode("IMAGE_SLICING");
     this.interactor.setInteractorStyle(iStyle); 
+  }
+  
+  orientationMarker() {  
+    const axes = vtkAxesActor.newInstance();
+    const orientationWidget = vtkOrientationMarkerWidget.newInstance({
+      actor: axes,
+      interactor: this.interactor,
+    });
+    orientationWidget.setEnabled(true);
+    orientationWidget.setViewportCorner(
+      vtkOrientationMarkerWidget.Corners.BOTTOM_LEFT
+    );
+    orientationWidget.setViewportSize(0.15);
+    orientationWidget.setMinPixelSize(100);
+    orientationWidget.setMaxPixelSize(300);
   }
 }
