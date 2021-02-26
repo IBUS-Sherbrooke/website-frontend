@@ -3,6 +3,8 @@ import { VisualisationDataService } from "../../services/visualisation-Data/visu
 import { vtk_image_to_STL } from "./vtk_image_to_STL";
 import { Subscription } from 'rxjs';
 import { PostDataService } from '../../services/post-data/post-data.service';
+import {saveAs} from 'file-saver'
+
 @Component({
   selector: 'app-file-conversion',
   templateUrl: './file-conversion.component.html',
@@ -31,6 +33,12 @@ export class FileConversionComponent implements OnInit {
     this.vtk_data_blob=vtk_image_to_STL(this.img_data)
     this.post_file()
   }
+
+  download_file(){
+    //This function converts the currently loaded VTK image into the stl format and 
+      this.vtk_data_blob=vtk_image_to_STL(this.img_data)
+      saveAs(this.vtk_data_blob, "my_file.stl")
+    }
 
   post_file() {
     this.Post_data_service.postFile(this.vtk_data_blob).subscribe(data => 
