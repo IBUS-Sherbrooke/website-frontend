@@ -2,6 +2,6 @@
     <label for="file">Upload le fichier au serveur pour l'imprimer &nbsp;   </label>
     <input type="file"
            id="file"
-           (change)="handleFileInput($event.target.files)">
+           (change)="handleFileInput($event.target.files)" multiple>
 </div>
 <p>{{return_message}}</p>

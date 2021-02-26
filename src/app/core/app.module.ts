@@ -11,6 +11,7 @@ import { TransverseVisualisationComponent } from '../components/transverse-visua
 import { TridimensionalVisualisationComponent } from '../components/tridimensional-visualisation/tridimensional-visualisation.component';
 import { ItkTestComponent } from '../components/itk-test/itk-test.component';
 import { SampleGetRequestComponent } from '../components/sample-get-request/sample-get-request.component';
+import { FileConversionComponent } from '../components/file-conversion/file-conversion.component';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,8 @@ import { SampleGetRequestComponent } from '../components/sample-get-request/samp
     TransverseVisualisationComponent,
     TridimensionalVisualisationComponent,
     ItkTestComponent,
-    SampleGetRequestComponent
+    SampleGetRequestComponent,
+    FileConversionComponent
   ],
   imports: [
     BrowserModule,

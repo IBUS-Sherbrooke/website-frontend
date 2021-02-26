@@ -11,7 +11,7 @@ export class VisualisationDataService {
 
   fileToUpload = null;
   visualisationData = new Subject<any>();
-
+  data2= new Subject<any>();
   constructor() { }
 
   load(files) {
@@ -19,10 +19,15 @@ export class VisualisationDataService {
       let data = ITKHelper.convertItkToVtkImage(image.image)
       console.log(data);
       this.visualisationData.next(data);
+      this.data2.next(data);
     })
   }
 
   getData(): Observable<any> {
     return this.visualisationData.asObservable();
+  }
+
+  getRawData(): Observable<any> {
+    return this.data2.asObservable();
   }
 }
