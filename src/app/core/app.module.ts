@@ -4,7 +4,6 @@ import { HttpClientModule } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
-import { FileUploadComponent } from '../components/file-upload/file-upload.component';
 import { CoronalVisualisationComponent } from '../components/coronal-visualisation/coronal-visualisation.component';
 import { SagittalVisualisationComponent } from '../components/sagittal-visualisation/sagittal-visualisation.component';
 import { TransverseVisualisationComponent } from '../components/transverse-visualisation/transverse-visualisation.component';
@@ -16,7 +15,6 @@ import { FileConversionComponent } from '../components/file-conversion/file-conv
 @NgModule({
   declarations: [
     AppComponent,
-    FileUploadComponent,
     CoronalVisualisationComponent,
     SagittalVisualisationComponent,
     TransverseVisualisationComponent,
