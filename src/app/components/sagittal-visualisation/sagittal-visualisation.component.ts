@@ -9,8 +9,10 @@ import vtkOpenGLRenderWindow from 'vtk.js/Sources/Rendering/OpenGL/RenderWindow'
 import vtkRenderWindow from 'vtk.js/Sources/Rendering/Core/RenderWindow';
 import vtkRenderWindowInteractor from 'vtk.js/Sources/Rendering/Core/RenderWindowInteractor';
 import vtkInteractorStyleImage from 'vtk.js/Sources/Interaction/Style/InteractorStyleImage';
-import vtkInteractorStyleTrackballCamera from 'vtk.js/Sources/Interaction/Style/InteractorStyleTrackballCamera';
 import vtkRenderer from 'vtk.js/Sources/Rendering/Core/Renderer';
+
+import vtkOrientationMarkerWidget from 'vtk.js/Sources/Interaction/Widgets/OrientationMarkerWidget';
+import vtkAxesActor from 'vtk.js/Sources/Rendering/Core/AxesActor';
 
 import Constants from 'vtk.js/Sources/Rendering/Core/ImageMapper/Constants';
 
@@ -50,6 +52,7 @@ export class SagittalVisualisationComponent implements OnInit {
     this.initializeView();
     this.subscription = this.visualisationDataService.getData()
       .subscribe(imageData => {
+        this.orientationMarker();
         this.mapper.setInputData(imageData);
         this.renderer.resetCamera();
         this.renderWindow.render();
@@ -64,22 +67,18 @@ export class SagittalVisualisationComponent implements OnInit {
     this.renderer = vtkRenderer.newInstance({ background: [0, 0, 0] });
     this.renderWindow.addRenderer(this.renderer);
 
-    this.actor = vtkImageSlice.newInstance();
     this.mapper = vtkImageMapper.newInstance();
     this.mapper.setSliceAtFocalPoint(true);
-    this.mapper.setXSlice(70);
+    this.mapper.setSlicingMode(SlicingMode.X);
 
-    
+    this.actor = vtkImageSlice.newInstance();
     this.actor.setMapper(this.mapper);
     this.renderer.addActor(this.actor);
     this.camera = this.renderer.getActiveCamera();
+    this.camera.setParallelProjection(true);
 
     this.camera.yaw(-90);
     this.camera.setViewUp([0, 0, 1]);
-
-    this.camera.setParallelProjection(true);
-    this.renderer.resetCameraClippingRange();
-    this.renderer.resetCamera();
 
     this.openglRenderWindow = vtkOpenGLRenderWindow.newInstance();
     this.renderWindow.addView(this.openglRenderWindow);
@@ -104,8 +103,24 @@ export class SagittalVisualisationComponent implements OnInit {
     this.interactor.initialize();
     this.interactor.bindEvents(this.sagittalDiv.nativeElement);
 
-    //this.interactor.setInteractionMode("IMAGE_SLICING");
-    //this.interactor.setInteractorStyle(vtkInteractorStyleImage.newInstance("IMAGE_SLICING"));
-    this.interactor.setInteractorStyle(vtkInteractorStyleTrackballCamera.newInstance());
+    const iStyle = vtkInteractorStyleImage.newInstance();
+    iStyle.setInteractionMode("IMAGE_SLICING");
+    this.interactor.setInteractorStyle(iStyle);
+  }
+
+  
+  orientationMarker() {  
+    const axes = vtkAxesActor.newInstance();
+    const orientationWidget = vtkOrientationMarkerWidget.newInstance({
+      actor: axes,
+      interactor: this.interactor,
+    });
+    orientationWidget.setEnabled(true);
+    orientationWidget.setViewportCorner(
+      vtkOrientationMarkerWidget.Corners.BOTTOM_LEFT
+    );
+    orientationWidget.setViewportSize(0.15);
+    orientationWidget.setMinPixelSize(100);
+    orientationWidget.setMaxPixelSize(300);
   }
 }

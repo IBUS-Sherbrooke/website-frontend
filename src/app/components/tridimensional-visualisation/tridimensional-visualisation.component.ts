@@ -12,6 +12,9 @@ import vtkVolumeMapper from 'vtk.js/Sources/Rendering/Core/VolumeMapper';
 import vtkPiecewiseFunction from 'vtk.js/Sources/Common/DataModel/PiecewiseFunction';
 import vtkColorTransferFunction from 'vtk.js/Sources/Rendering/Core/ColorTransferFunction';
 
+import vtkOrientationMarkerWidget from 'vtk.js/Sources/Interaction/Widgets/OrientationMarkerWidget';
+import vtkAxesActor from 'vtk.js/Sources/Rendering/Core/AxesActor';
+
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -43,6 +46,7 @@ export class TridimensionalVisualisationComponent implements OnInit {
     this.initializeView();
     this.subscription = this.visualisationDataService.getData()
       .subscribe(imageData => {
+        this.orientationMarker();
         this.mapper.setInputData(imageData);
         this.renderer.resetCamera();
         this.renderWindow.render();
@@ -67,7 +71,7 @@ export class TridimensionalVisualisationComponent implements OnInit {
     this.renderer.addVolume(this.actor);
     this.renderer.resetCamera();
     this.camera.pitch(90);
-  
+
     const ctfun = vtkColorTransferFunction.newInstance();
     ctfun.addRGBPoint(0, 85 / 255.0, 0, 0);
     ctfun.addRGBPoint(95, 1.0, 1.0, 1.0);
@@ -107,6 +111,21 @@ export class TridimensionalVisualisationComponent implements OnInit {
     this.interactor.bindEvents(this.tridimensionalDiv.nativeElement);
 
     this.interactor.setInteractorStyle(vtkInteractorStyleTrackballCamera.newInstance());
+  }
+
+  orientationMarker() {  
+    const axes = vtkAxesActor.newInstance();
+    const orientationWidget = vtkOrientationMarkerWidget.newInstance({
+      actor: axes,
+      interactor: this.interactor,
+    });
+    orientationWidget.setEnabled(true);
+    orientationWidget.setViewportCorner(
+      vtkOrientationMarkerWidget.Corners.BOTTOM_LEFT
+    );
+    orientationWidget.setViewportSize(0.15);
+    orientationWidget.setMinPixelSize(100);
+    orientationWidget.setMaxPixelSize(300);
   }
 }
 
