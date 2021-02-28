@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { FileDbUploadService } from './file-db-upload.service';
+import { PostDataService } from './post-data.service';
 
-describe('FileDbUploadService', () => {
-  let service: FileDbUploadService;
+describe('PostDataService', () => {
+  let service: PostDataService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(FileDbUploadService);
+    service = TestBed.inject(PostDataService);
   });
 
   it('should be created', () => {
