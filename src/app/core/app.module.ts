@@ -10,6 +10,9 @@ import { TransverseVisualisationComponent } from '../components/transverse-visua
 import { TridimensionalVisualisationComponent } from '../components/tridimensional-visualisation/tridimensional-visualisation.component';
 import { ItkTestComponent } from '../components/itk-test/itk-test.component';
 import { SampleGetRequestComponent } from '../components/sample-get-request/sample-get-request.component';
+import { GeneralControllerComponent } from '../components/general-controller/general-controller.component';
+import { DatasetControllerComponent } from '../components/dataset-controller/dataset-controller.component';
+import { ToolsControllerComponent } from '../components/tools-controller/tools-controller.component';
 import { FileConversionComponent } from '../components/file-conversion/file-conversion.component';
 
 @NgModule({
@@ -21,6 +24,9 @@ import { FileConversionComponent } from '../components/file-conversion/file-conv
     TridimensionalVisualisationComponent,
     ItkTestComponent,
     SampleGetRequestComponent,
+    GeneralControllerComponent,
+    DatasetControllerComponent,
+    ToolsControllerComponent,
     FileConversionComponent
   ],
   imports: [

@@ -1,31 +1,40 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-  <a class="navbar-brand" href="#">
-    <img src="./assets/logo.png" alt="IBUS Logo" id="logo">
-  </a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+<nav class="navbar navbar-light bg-light">
+
+  <button class="navbar-toggler" type="button" (click)="toggleNav()">
     <span class="navbar-toggler-icon"></span>
   </button>
 
-  <div class="collapse navbar-collapse" id="navbarSupportedContent">
-    <ul class="navbar-nav mr-auto">
-      <li class="nav-item active">
-        <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
-      </li>
-    </ul>
-  </div>
+  <a class="navbar-brand" href="#">
+      <img src="assets/project_logo.png" alt="IBUS Logo" id="logo">
+  </a>
+
 </nav>
 
-<div class="view-container">
-  <app-coronal-visualisation></app-coronal-visualisation>
-  <app-transverse-visualisation></app-transverse-visualisation>
-  <app-sagittal-visualisation></app-sagittal-visualisation>
-  <app-tridimensional-visualisation></app-tridimensional-visualisation>
+<!-- Add all page content inside this div if you want the side nav to push page content to the right (not used if you only want the sidenav to sit on top of the page -->
+<div id="mySidenav" class="sidenav">
+  <div class="menuGroup" id="controllerGroup">
+    <a class="controllerMenu active" routerLink="/general-controller" (click)="clickController($event.target)">General</a>
+    <a class="controllerMenu" routerLink="/dataset-controller" (click)="clickController($event.target)">Dataset</a>
+    <a class="controllerMenu" routerLink="/tools-controller" (click)="clickController($event.target)">Tools</a>
+  </div>
+  <div class="sideContent">
+    <router-outlet></router-outlet>
+  </div>
 </div>
-<div>
-  <p>
-  <br />
-  </p>
-  <app-sample-get-request></app-sample-get-request>
-  <app-itk-test></app-itk-test>
-  <app-file-conversion></app-file-conversion>
+
+<div id="main">
+  <div class="view-container">
+    <app-coronal-visualisation></app-coronal-visualisation>
+    <app-transverse-visualisation></app-transverse-visualisation>
+    <app-sagittal-visualisation></app-sagittal-visualisation>
+    <app-tridimensional-visualisation></app-tridimensional-visualisation>
+  </div>
+  <div>
+    <p>
+    <br />
+    </p>
+    <app-sample-get-request></app-sample-get-request>
+    <app-itk-test></app-itk-test>
+    <app-file-conversion></app-file-conversion>
+  </div>
 </div>
