@@ -52,6 +52,7 @@ export class CoronalVisualisationComponent implements OnInit{
         this.mapper.setInputData(imageData);
         this.renderer.resetCamera();
         this.renderWindow.render();
+        this.renderWindow.getViewProps();
       }),
       error => {
         console.log(error);

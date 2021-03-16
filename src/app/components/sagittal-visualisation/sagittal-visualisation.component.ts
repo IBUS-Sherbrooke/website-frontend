@@ -1,6 +1,6 @@
 import { ViewChild, ElementRef, Component, OnInit } from '@angular/core';
 
-import { VisualisationDataService } from "../../services/visualisation-Data/visualisation-data.service";
+import { VtkManagerService } from "../../services/vtk-manager/vtk-manager.service";
 
 import vtkImageMapper from 'vtk.js/Sources/Rendering/Core/ImageMapper';
 import vtkImageSlice from 'vtk.js/Sources/Rendering/Core/ImageSlice';
@@ -43,14 +43,14 @@ export class SagittalVisualisationComponent implements OnInit {
 
   subscription: Subscription;
 
-  constructor(private visualisationDataService: VisualisationDataService) { }
+  constructor(private vtkManagerService: VtkManagerService) { }
 
   ngOnInit(): void {
   }
 
   ngAfterViewInit(): void {
     this.initializeView();
-    this.subscription = this.visualisationDataService.getData()
+    /* this.subscription = this.vtkManagerService.getData()
       .subscribe(imageData => {
         this.orientationMarker();
         this.mapper.setInputData(imageData);
@@ -59,7 +59,7 @@ export class SagittalVisualisationComponent implements OnInit {
       }),
       error => {
         console.log(error);
-      }
+      } */
   }
 
   initializeView() {
