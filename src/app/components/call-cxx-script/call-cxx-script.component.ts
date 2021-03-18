@@ -15,10 +15,10 @@ declare var require: any
   styleUrls: ['./call-cxx-script.component.css']
 })
 export class CallCxxScriptComponent implements OnInit {
-  //webWorker=new Worker("../../../../itk/web-build/itkfilteringWasm.js")
   webWorker
   
   constructor() {     
+  //Load the script to call locally so that runPipelineBrowser can find it.
   const script = document.createElement("script")
   script.type = "text/javascript"
   script.src = "./itk/Pipelines/helloWasm.js"
@@ -30,8 +30,10 @@ export class CallCxxScriptComponent implements OnInit {
   call_script(){
 
     runPipelineBrowser(
-      this.webWorker, //on passe null ici, pour qu'il créer un nouveau web worker
-      'hello').then((result) => {
+      this.webWorker, //We pass null here, to create a new web worker
+      'hello'//Script to call
+      ).then((result) => {
+      
       console.log(result)
       this.webWorker = result.webWorker;
       })
