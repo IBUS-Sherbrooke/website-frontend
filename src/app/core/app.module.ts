@@ -14,6 +14,7 @@ import { GeneralControllerComponent } from '../components/general-controller/gen
 import { DatasetControllerComponent } from '../components/dataset-controller/dataset-controller.component';
 import { ToolsControllerComponent } from '../components/tools-controller/tools-controller.component';
 import { FileConversionComponent } from '../components/file-conversion/file-conversion.component';
+import { CallCxxScriptComponent } from '../components/call-cxx-script/call-cxx-script.component';
 
 @NgModule({
   declarations: [
@@ -27,7 +28,8 @@ import { FileConversionComponent } from '../components/file-conversion/file-conv
     GeneralControllerComponent,
     DatasetControllerComponent,
     ToolsControllerComponent,
-    FileConversionComponent
+    FileConversionComponent,
+    CallCxxScriptComponent
   ],
   imports: [
     BrowserModule,

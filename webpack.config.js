@@ -52,6 +52,10 @@ module.exports = {
         {
         from: "src/assets",
         to: "assets",
+        },
+        {
+        from: "src/itk/web-build/",
+        to: "itk/Pipelines/",
         }
       ]
     }),
