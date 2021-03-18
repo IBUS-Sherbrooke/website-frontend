@@ -72,7 +72,8 @@
 #main {
   transition: padding-left .5s;
   padding: 0px;
-  margin-left: 1%;
+  min-width: 100%;
+  height: calc(100% - 77.75px);
 }
 
 /* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
@@ -83,7 +84,8 @@
 
 /* App view styling */
 .view-container {
-  display: inline-grid;
-  grid-template-columns: repeat(2, 1fr);
-  grid-template-rows: repeat(2, 1fr);
+  height: 100%;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-rows: repeat(2, minmax(0, 1fr));
 }

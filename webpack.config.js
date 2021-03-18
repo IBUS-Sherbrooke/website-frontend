@@ -5,7 +5,7 @@ const CopyPlugin = require('copy-webpack-plugin')
 var vtkRules = require('vtk.js/Utilities/config/dependency.js').webpack.core.rules;
 
 // Optional if you want to load *.css and *.module.css files
-// var cssRules = require('vtk.js/Utilities/config/dependency.js').webpack.css.rules;
+var cssRules = require('vtk.js/Utilities/config/dependency.js').webpack.css.rules;
 
 var entry = path.join(__dirname, './src/index.html');
 const sourcePath = path.join(__dirname, './src');
@@ -17,6 +17,7 @@ module.exports = {
   },
   entry: {
     polyfills: 'src/polyfills.ts',
+    styles: "./src/styles.css",
     main: './src/main.ts'
   },
   output: {
@@ -25,10 +26,17 @@ module.exports = {
   },
   module: {
     rules: [
-        { test: /\.html$/, loader: 'html-loader' },
-        { test: entry, loader: 'expose-loader?index' },
-        { test: /\.js$/, loader: 'babel-loader' },
-    ].concat(vtkRules),
+      { //this rule will only be used for any vendors
+        test: /\.css$/,
+        loaders: ['style-loader', 'css-loader'],
+        include: [/node_modules/]
+      },
+      {
+        test: /\.css$/,
+        loaders: ['to-string-loader', 'css-loader'],
+        exclude: [/node_modules/] //add this line so we ignore css coming from node_modules
+      },
+    ].concat(vtkRules/* , cssRules */),
   },
   plugins: [
     new CopyPlugin({
