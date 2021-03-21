@@ -20,6 +20,10 @@ CMAKE_ADDR2LINE:FILEPATH=/usr/bin/addr2line
 //Emscripten ar
 CMAKE_AR:FILEPATH=/emsdk_portable/emscripten/sdk/emar
 
+//For backwards compatibility, what version of CMake commands and
+// syntax should this version of CMake try to support.
+CMAKE_BACKWARDS_COMPATIBILITY:STRING=2.4
+
 //No help, variable specified on the command line.
 CMAKE_BUILD_TYPE:STRING=Release
 
@@ -205,6 +209,9 @@ EMSCRIPTEN_FORCE_COMPILERS:BOOL=ON
 // If disabled (default), UNIX ar archives (.a) are generated.
 EMSCRIPTEN_GENERATE_BITCODE_STATIC_LIBRARIES:BOOL=OFF
 
+//Single output directory for building all executables.
+EXECUTABLE_OUTPUT_PATH:PATH=
+
 //Value Computed by CMake
 HelloWorld_BINARY_DIR:STATIC=/work/web-build
 
@@ -213,6 +220,9 @@ HelloWorld_SOURCE_DIR:STATIC=/work
 
 //No help, variable specified on the command line.
 ITK_DIR:PATH=/ITK-build
+
+//Single output directory for building all libraries.
+LIBRARY_OUTPUT_PATH:PATH=
 
 //Path to a program.
 NODE_JS_EXECUTABLE:FILEPATH=/emsdk_portable/node/current/bin/node

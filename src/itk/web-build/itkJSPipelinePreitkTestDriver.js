@@ -1,12 +1,12 @@
 Module['locateFile'] = function(fileName, prefix) {
-  if(fileName === 'helloWasm.wasm') {
-    if (hello.isAbsoluteURL) {
-      return hello.pipelinePath + 'Wasm.wasm'
+  if(fileName === 'itkTestDriverWasm.wasm') {
+    if (itkTestDriver.isAbsoluteURL) {
+      return itkTestDriver.pipelinePath + 'Wasm.wasm'
     }
-    if (typeof hello.moduleScriptDir !== 'undefined') {
-      return hello.moduleScriptDir + '/helloWasm.wasm'
+    if (typeof itkTestDriver.moduleScriptDir !== 'undefined') {
+      return itkTestDriver.moduleScriptDir + '/itkTestDriverWasm.wasm'
     }
-    return prefix + '../Pipelines/helloWasm.wasm'
+    return prefix + '../Pipelines/itkTestDriverWasm.wasm'
   }
   return prefix + fileName
 }

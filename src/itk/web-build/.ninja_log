@@ -1,5 +1,5 @@
 # ninja log v5
-4	499	0	CMakeFiles/helloWasm.dir/hello.cxx.o	c1e4f5dfaae9f167
-5	520	0	CMakeFiles/hello.dir/hello.cxx.o	e1a7998407611e54
-521	2007	0	hello.js	a40895b9d07b5afa
-514	2202	0	helloWasm.js	193bb504386e1133
+6	1674	0	CMakeFiles/HelloWorld.dir/HelloWorld.o	fbdca4765b845f18
+5	1704	0	CMakeFiles/HelloWorldWasm.dir/HelloWorld.o	57fd10034a7edec
+1700	18620	0	HelloWorld.js	f110a95b5b3ab67f
+1706	19027	0	HelloWorldWasm.js	7cf0b1ed6824acec

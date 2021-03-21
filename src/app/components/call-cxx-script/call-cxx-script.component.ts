@@ -21,7 +21,7 @@ export class CallCxxScriptComponent implements OnInit {
   //Load the script to call locally so that runPipelineBrowser can find it.
   const script = document.createElement("script")
   script.type = "text/javascript"
-  script.src = "./itk/Pipelines/helloWasm.js"
+  script.src = "./itk/Pipelines/HelloWorld.js"
   document.head.appendChild(script)}
 
   ngOnInit(): void {
@@ -31,7 +31,7 @@ export class CallCxxScriptComponent implements OnInit {
 
     runPipelineBrowser(
       this.webWorker, //We pass null here, to create a new web worker
-      'hello'//Script to call
+      'HelloWorld'//Script to call
       ).then((result) => {
       
       console.log(result)

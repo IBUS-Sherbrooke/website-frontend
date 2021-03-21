@@ -30,7 +30,7 @@
             "styles": [
               "src/styles.css"
             ],
-            "scripts": ["src/itk/web-build/helloWasm.js"]
+            "scripts": ["src/itk/web-build/HelloWorld.js"]
           },
           "configurations": {
             "production": {
@@ -95,7 +95,7 @@
               "src/styles.css"
             ],
             "scripts": [
-              "src/itk/web-build/helloWasm.js"]
+              "src/itk/web-build/HelloWorld.js"]
           }
         },
         "lint": {
