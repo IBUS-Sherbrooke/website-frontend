@@ -9,8 +9,12 @@ export class AppComponent {
   toggleNav() {
     var sidenav = document.getElementById("mySidenav");
     var main = document.getElementById("main");
+    var SideNavToggleButton = document.getElementById("SideNavToggleButton");
+    var SideNavToggleText = document.getElementById("menu-toggle");
     sidenav.style.width = sidenav.style.width === "250px" ? '0' : '250px';
     main.style.paddingLeft = main.style.paddingLeft === "250px" ? '0' :  '250px';
+    SideNavToggleButton.style.left = SideNavToggleButton.style.left === "250px" ? '0' :  '250px';
+    SideNavToggleText.innerText = SideNavToggleText.innerText === ">" ? "<" : ">";
   }
 
   clickController(clickedButton) {

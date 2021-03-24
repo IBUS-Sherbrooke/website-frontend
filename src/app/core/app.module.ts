@@ -1,8 +1,10 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import {MatTabsModule} from '@angular/material/tabs';
 import { HttpClientModule } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+
 
 import { CoronalVisualisationComponent } from '../components/coronal-visualisation/coronal-visualisation.component';
 import { SagittalVisualisationComponent } from '../components/sagittal-visualisation/sagittal-visualisation.component';
@@ -29,13 +31,14 @@ import { CallCxxScriptComponent } from '../components/call-cxx-script/call-cxx-s
     DatasetControllerComponent,
     ToolsControllerComponent,
     FileConversionComponent,
-    CallCxxScriptComponent
+    CallCxxScriptComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule, 
-    AppRoutingModule
+    AppRoutingModule,
+    MatTabsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
