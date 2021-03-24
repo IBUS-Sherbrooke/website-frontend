@@ -37,7 +37,11 @@ export class CallCxxScriptComponent implements OnInit {
     }
   }
   call_script(){
-
+    console.log(this.img_data)
+    // prevent source data neutering
+    this.img_data.data=this.img_data.data.slice(0)
+    console.log(this.img_data)
+    //let a= ['Segmentation', 'input.json', 'output.json', String(0),String(255),String(5),String(5),String(5)],//args
     runPipelineBrowser(
       this.webWorker, //We pass null here, to create a new web worker
       'HelloWorld',//Script to call
@@ -48,8 +52,6 @@ export class CallCxxScriptComponent implements OnInit {
       console.log(result)
       this.webWorker = result.webWorker;
       })
-    
-
   }
 }
 

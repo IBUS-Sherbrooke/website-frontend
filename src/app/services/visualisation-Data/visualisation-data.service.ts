@@ -11,15 +11,16 @@ export class VisualisationDataService {
 
   fileToUpload = null;
   visualisationData = new Subject<any>();
-  data2= new Subject<any>();
+  raw_data= new Subject<any>();
   constructor() { }
 
   load(files) {
     readImageDICOMFileSeries(files).then(image => {
       let data = ITKHelper.convertItkToVtkImage(image.image)
+      let data_autre = ITKHelper.convertVtkToItkImage(data);
       console.log(data);
       this.visualisationData.next(data);
-      this.data2.next(data);
+      this.raw_data.next(data_autre);
     })
   }
 
@@ -28,6 +29,6 @@ export class VisualisationDataService {
   }
 
   getRawData(): Observable<any> {
-    return this.data2.asObservable();
+    return this.raw_data.asObservable();
   }
 }

@@ -4,8 +4,10 @@
 #include "itkImageFileWriter.h"
 #include "itkIndex.h"
 #include <itkMedianImageFilter.h>
+#include <itkMacro.h>
 //#include <itkCastImageFilter.h>
 int main(int argc, char * argv[]) {
+	std::cout << "Debug world!" << std::endl;
 	if( argc < 9 )
     {
  	std::cerr << "Usage: " << argv[0] << " medianfilter <inputImage> <outputImageFile> <lowerThreshold> <upperThreshold> <indexx>  <indexy> <indexz>" << std::endl;
@@ -23,7 +25,6 @@ int main(int argc, char * argv[]) {
 	using InternalPixelType = float;
 	constexpr unsigned int Dimension = 3;
 	using InternalImageType = itk::Image<InternalPixelType, Dimension>;
-
 	using ReaderType = itk::ImageFileReader< InternalImageType >;
   	auto reader = ReaderType::New();
   	reader->SetFileName( inputImageFile );
@@ -50,20 +51,26 @@ int main(int argc, char * argv[]) {
 	connectedThreshold->SetUpper(upperThreshold);//Valeur en input
 	connectedThreshold->SetReplaceValue(255);
 	connectedThreshold->SetSeed(index);//Valeur en input
-
 	//Ecriture du writer
 	using WriterType = itk::ImageFileWriter< InternalImageType>;
  	auto writer = WriterType::New();
 	//caster pour convertir en int les trucs a ecrire.
 	//using CasterType = itk::CastImageFilter<InternalImageType, WriterType>;
 	//CasterType::Pointer caster = CasterType::New();
-
 	//caster->SetInput(connectedThreshold->GetOutput()); 
 	//writer->SetInput(caster->GetOutput());
-	writer->SetInput(connectedThreshold->GetOutput());
-  	writer->SetFileName( outputImageFile );
-	writer->Update();
+	writer->SetInput(reader->GetOutput());
+  	writer->SetFileName(outputImageFile );
+	try
+    {
+    writer->Update();
+    }
+  	catch( itk::ExceptionObject & error )
+    {
+    std::cout << "Error: " << error << std::endl;
+    return EXIT_FAILURE;
+    }
 
-  std::cout << "Hello world!" << std::endl;
+ 	std::cout << "Hello world!" << std::endl;
   return 0;
 }

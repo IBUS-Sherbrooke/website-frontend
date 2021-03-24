@@ -19,7 +19,7 @@ export class FileConversionComponent implements OnInit {
 
   ngOnInit(): void {
     //get data on upload (this should be changed to update data whenever it is changed through segmentation or other inputs)
-    this.subscription = this.visualisationDataService.getRawData()
+    this.subscription = this.visualisationDataService.getData()
     .subscribe(imageData => {
       this.img_data=imageData
     }),
