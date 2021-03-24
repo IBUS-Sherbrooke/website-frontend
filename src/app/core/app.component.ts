@@ -6,16 +6,38 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  toggleNav() {
-    var sidenav = document.getElementById("mySidenav");
-    var main = document.getElementById("main");
-    var SideNavToggleButton = document.getElementById("SideNavToggleButton");
-    var SideNavToggleText = document.getElementById("menu-toggle");
-    sidenav.style.width = sidenav.style.width === "250px" ? '0' : '250px';
-    main.style.paddingLeft = main.style.paddingLeft === "250px" ? '0' :  '250px';
-    SideNavToggleButton.style.left = SideNavToggleButton.style.left === "250px" ? '0' :  '250px';
-    SideNavToggleText.innerText = SideNavToggleText.innerText === ">" ? "<" : ">";
+  sidenav:any;
+  main:any;
+  SideNavToggleButton:any;
+  SideNavToggleText:any;
+  print_status:any;
+  ngOnInit(): void {
+    this.sidenav = document.getElementById("mySidenav");
+    this.main = document.getElementById("main");
+    this.SideNavToggleButton = document.getElementById("SideNavToggleButton");
+    this.SideNavToggleText = document.getElementById("menu-toggle");
+    this.print_status = document.getElementById("print_status");
   }
+  toggleNav() {
+    this.sidenav.style.width = this.sidenav.style.width === "250px" ? '0' : '250px';
+    this.main.style.paddingLeft = this.main.style.paddingLeft === "250px" ? '0' :  '250px';
+    this.SideNavToggleButton.style.left = this.SideNavToggleButton.style.left === "250px" ? '0' :  '250px';
+    this.SideNavToggleText.innerText = this.SideNavToggleText.innerText === ">" ? "<" : ">";
+  }
+
+  enable_Print_Status(){
+    this.sidenav.style.display  = 'none';
+    this.main.style.display  = 'none';
+    this.SideNavToggleButton.style.display = 'none';
+    this.print_status.style.display = "block";
+  }
+  enable_Visualisation(){
+    this.sidenav.style.display  = 'block'
+    this.main.style.display = 'block'
+    this.SideNavToggleButton.style.display = 'block'
+    this.print_status.style.display = "none";
+  }
+
 
   clickController(clickedButton) {
     // Get the container element

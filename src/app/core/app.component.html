@@ -3,7 +3,10 @@
       <img src="assets/project_logo.png" alt="IBUS Logo" id="logo">
   </a>
 
+  <button class="btn" (click)="enable_Visualisation()">Visualisation</button>
+  <button class="btn" (click)="enable_Print_Status()">Print status</button>
 </nav>
+
 <div id="mySidenavController">
   <!-- Add all page content inside this div if you want the side nav to push page content to the right (not used if you only want the sidenav to sit on top of the page -->
   <div id="mySidenav" class="sidenav">
@@ -18,15 +21,14 @@
   </div>
 
   <div id="SideNavToggleButton">
-    <div style="position: absolute; left: 0px; top: 0px; z-index: 2; color: blue">
+    <div style="position: absolute; left: 0px; top: 0px; z-index: 2;">
     <button class="navbar-toggler" id="menu-toggle" type="button" (click)="toggleNav()">
     >
     </button>
   </div>
   </div>
-
+  
 </div>
-
 
 <div id="main">
   <div class="view-container">
@@ -36,3 +38,9 @@
     <app-tridimensional-visualisation></app-tridimensional-visualisation>
   </div>
 </div>
+
+
+<div id="print_status">
+  <app-print-status-page></app-print-status-page>
+</div>
+

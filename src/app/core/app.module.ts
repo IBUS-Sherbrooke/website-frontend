@@ -1,6 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import {MatTabsModule} from '@angular/material/tabs';
 import { HttpClientModule } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -17,6 +16,7 @@ import { DatasetControllerComponent } from '../components/dataset-controller/dat
 import { ToolsControllerComponent } from '../components/tools-controller/tools-controller.component';
 import { FileConversionComponent } from '../components/file-conversion/file-conversion.component';
 import { CallCxxScriptComponent } from '../components/call-cxx-script/call-cxx-script.component';
+import { PrintStatusPageComponent } from '../components/print-status-page/print-status-page.component';
 
 @NgModule({
   declarations: [
@@ -32,13 +32,13 @@ import { CallCxxScriptComponent } from '../components/call-cxx-script/call-cxx-s
     ToolsControllerComponent,
     FileConversionComponent,
     CallCxxScriptComponent,
+    PrintStatusPageComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule, 
-    AppRoutingModule,
-    MatTabsModule
+    AppRoutingModule
   ],
   providers: [],
   bootstrap: [AppComponent]
