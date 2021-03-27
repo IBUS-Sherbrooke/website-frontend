@@ -11,6 +11,8 @@ import vtkInteractorStyleImage from 'vtk.js/Sources/Interaction/Style/Interactor
 import vtkRenderer from 'vtk.js/Sources/Rendering/Core/Renderer';
 import Constants from 'vtk.js/Sources/Rendering/Core/ImageMapper/Constants';
 
+import vtkCornerAnnotation from 'vtk.js/Sources/Interaction/UI/CornerAnnotation';
+
 import vtkOrientationMarkerWidget from 'vtk.js/Sources/Interaction/Widgets/OrientationMarkerWidget';
 import vtkAxesActor from 'vtk.js/Sources/Rendering/Core/AxesActor';
 
@@ -99,6 +101,8 @@ export class CoronalVisualisationComponent implements OnInit{
     const iStyle = vtkInteractorStyleImage.newInstance();
     iStyle.setInteractionMode("IMAGE_SLICING");
     this.interactor.setInteractorStyle(iStyle);
+
+    this.addAnnotations();
   }
 
   
@@ -115,5 +119,16 @@ export class CoronalVisualisationComponent implements OnInit{
     orientationWidget.setViewportSize(0.15);
     orientationWidget.setMinPixelSize(100);
     orientationWidget.setMaxPixelSize(300);
+  }
+
+  addAnnotations() {
+    // Add corner annotation
+    const cornerAnnotation = vtkCornerAnnotation.newInstance();
+    cornerAnnotation.setContainer(this.openglRenderWindow.getContainer());
+    cornerAnnotation.getAnnotationContainer().style.color = 'white';
+    /* cornerAnnotation.updateMetadata(); */
+    cornerAnnotation.updateTemplates({
+      nw() { return `Coronal`; }
+    });
   }
 }

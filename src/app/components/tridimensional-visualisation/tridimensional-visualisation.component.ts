@@ -12,6 +12,8 @@ import vtkVolumeMapper from 'vtk.js/Sources/Rendering/Core/VolumeMapper';
 import vtkPiecewiseFunction from 'vtk.js/Sources/Common/DataModel/PiecewiseFunction';
 import vtkColorTransferFunction from 'vtk.js/Sources/Rendering/Core/ColorTransferFunction';
 
+import vtkCornerAnnotation from 'vtk.js/Sources/Interaction/UI/CornerAnnotation';
+
 import vtkOrientationMarkerWidget from 'vtk.js/Sources/Interaction/Widgets/OrientationMarkerWidget';
 import vtkAxesActor from 'vtk.js/Sources/Rendering/Core/AxesActor';
 
@@ -114,6 +116,8 @@ export class TridimensionalVisualisationComponent implements OnInit {
     this.interactor.bindEvents(this.tridimensionalDiv.nativeElement);
 
     this.interactor.setInteractorStyle(vtkInteractorStyleTrackballCamera.newInstance());
+
+    this.addAnnotations();
   }
 
   orientationMarker() {  
@@ -129,6 +133,17 @@ export class TridimensionalVisualisationComponent implements OnInit {
     orientationWidget.setViewportSize(0.15);
     orientationWidget.setMinPixelSize(100);
     orientationWidget.setMaxPixelSize(300);
+  }
+
+  addAnnotations() {
+    // Add corner annotation
+    const cornerAnnotation = vtkCornerAnnotation.newInstance();
+    cornerAnnotation.setContainer(this.openglRenderWindow.getContainer());
+    cornerAnnotation.getAnnotationContainer().style.color = 'white';
+    /* cornerAnnotation.updateMetadata(); */
+    cornerAnnotation.updateTemplates({
+      nw() { return `3D`; }
+    });
   }
 }
 

@@ -14,6 +14,8 @@ import vtkRenderer from 'vtk.js/Sources/Rendering/Core/Renderer';
 import vtkOrientationMarkerWidget from 'vtk.js/Sources/Interaction/Widgets/OrientationMarkerWidget';
 import vtkAxesActor from 'vtk.js/Sources/Rendering/Core/AxesActor';
 
+import vtkCornerAnnotation from 'vtk.js/Sources/Interaction/UI/CornerAnnotation';
+
 import Constants from 'vtk.js/Sources/Rendering/Core/ImageMapper/Constants';
 
 import { Subscription } from 'rxjs';
@@ -97,15 +99,17 @@ export class SagittalVisualisationComponent implements OnInit {
     /* this.interactor = vtkInteractorStyleImage.newInstance();
     this.interactor.setInteractionMode("IMAGE_SLICING");
     this.renderWindow.getInteractor().setInteractorStyle(this.interactor); */
-
     this.interactor = vtkRenderWindowInteractor.newInstance();
     this.interactor.setView(this.openglRenderWindow);
     this.interactor.initialize();
     this.interactor.bindEvents(this.sagittalDiv.nativeElement);
 
+
     const iStyle = vtkInteractorStyleImage.newInstance();
     iStyle.setInteractionMode("IMAGE_SLICING");
     this.interactor.setInteractorStyle(iStyle);
+
+    this.addAnnotations();
   }
 
   
@@ -122,5 +126,16 @@ export class SagittalVisualisationComponent implements OnInit {
     orientationWidget.setViewportSize(0.15);
     orientationWidget.setMinPixelSize(100);
     orientationWidget.setMaxPixelSize(300);
+  }
+
+  addAnnotations() {
+    // Add corner annotation
+    const cornerAnnotation = vtkCornerAnnotation.newInstance();
+    cornerAnnotation.setContainer(this.openglRenderWindow.getContainer());
+    cornerAnnotation.getAnnotationContainer().style.color = 'white';
+    /* cornerAnnotation.updateMetadata(); */
+    cornerAnnotation.updateTemplates({
+      nw() { return `Sagittal`; }
+    });
   }
 }
