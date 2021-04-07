@@ -60,15 +60,15 @@ int main(int argc, char * argv[]) {
 	//caster->SetInput(connectedThreshold->GetOutput()); 
 	//writer->SetInput(caster->GetOutput());
 	writer->SetInput(reader->GetOutput());
-  	writer->SetFileName(outputImageFile );
+  	writer->SetFileName(outputImageFile);
+	  
 	try
     {
-    writer->Update();
+    	writer->Update();
     }
   	catch( itk::ExceptionObject & error )
     {
-    std::cout << "Error: " << error << std::endl;
-    return EXIT_FAILURE;
+    	std::cout << "Error: " << error.what() << std::endl;
     }
 
  	std::cout << "Hello world!" << std::endl;

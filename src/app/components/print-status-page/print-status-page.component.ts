@@ -11,5 +11,8 @@ export class PrintStatusPageComponent implements OnInit {
 
   ngOnInit(): void {
   }
+  send_input(text){
+    console.log(text)
+  }
 
 }

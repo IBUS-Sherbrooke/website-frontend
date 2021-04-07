@@ -2,8 +2,7 @@
 <div class="container">
     <div class="demo-flex-spacer"></div>
     <div class="webflow-style-input">
-      <input class="" type="email" placeholder="Entrez le nom d'utilisateur"/>
-      <button type="submit"><i class="icon ion-android-arrow-forward"></i></button>
+    <input id=username_input (keydown.enter)="send_input($event.target.value)" class="" placeholder="Entrez votre pseudonyme"/>
     </div>
     <div class="demo-flex-spacer"></div>
 </div>
