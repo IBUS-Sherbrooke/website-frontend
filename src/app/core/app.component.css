@@ -112,7 +112,7 @@
     z-index: 2;
     transition: 0.5s;
 }
-
+#print_status { display: none;}
 #menu-toggle {
   background-color: white; /* Green */
 }
