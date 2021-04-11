@@ -66,11 +66,19 @@ html {
     color: rgba(202, 205, 239, 0.8);
     margin-bottom: 3rem;
   }
-  
+  .btntxt{
+    color : #f5f6ff;
+  }
   .demo-flex-spacer {
     flex-grow: 1;
   }
-  
+  .demo-half-spacer {
+    flex-grow: 0.5;
+  }
+  .demo-half-spacer2 {
+    flex-grow: 0.5;
+  }
+
   .container {
     display: flex;
     flex-direction: column;
@@ -79,7 +87,17 @@ html {
     padding: 0 15px;
     margin: 0 auto;
   }
-  
+  .request_output {
+    height: 30px;
+    /*display: flex;*/
+    text-align:center;
+    justify-content: center;
+  }
+  .YourClass{
+    color: rgba(202, 205, 239, 0.8);
+    justify-content: center;
+    left: 50%;
+  }
   @-webkit-keyframes gradient {
     0% {
       background-position: 0 0;

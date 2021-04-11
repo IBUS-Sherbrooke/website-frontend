@@ -1,9 +1,13 @@
 <body>
 <div class="container">
-    <div class="demo-flex-spacer"></div>
+    <div class="demo-half-spacer"></div>
+    <div class="demo-half-spacer2"></div>
+    <div class="Generated_Btn"></div>
+    
     <div class="webflow-style-input">
-    <input id=username_input (keydown.enter)="send_input($event.target.value)" class="" placeholder="Entrez votre pseudonyme"/>
+    <input id=username_input (keydown.enter)="request_print_status($event.target.value)" class="" placeholder="Entrez votre pseudonyme"/>
     </div>
+    <div id=request_output class="request_output"></div>
     <div class="demo-flex-spacer"></div>
 </div>
 </body>
