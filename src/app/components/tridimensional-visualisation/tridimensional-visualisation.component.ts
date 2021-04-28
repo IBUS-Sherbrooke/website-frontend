@@ -1,6 +1,6 @@
 import { ViewChild, ElementRef, Component, OnInit } from '@angular/core';
 
-import { VisualisationDataService } from "../../services/visualisation-Data/visualisation-data.service";
+import { VisualisationDataService } from '../../services/visualisation-Data/visualisation-data.service';
 
 import vtkOpenGLRenderWindow from 'vtk.js/Sources/Rendering/OpenGL/RenderWindow';
 import vtkRenderWindow from 'vtk.js/Sources/Rendering/Core/RenderWindow';
@@ -52,14 +52,16 @@ export class TridimensionalVisualisationComponent implements OnInit {
         this.mapper.setInputData(imageData);
         this.renderer.resetCamera();
         this.renderWindow.render();
-        console.log("camera" + this.camera.getPosition());
+        console.log('camera' + this.camera.getPosition());
+        const loader = document.getElementById('loader');
+        loader.style.visibility = 'hidden';
       }),
       error => {
         console.log(error);
-      }
+      };
   }
 
-  initializeView() {
+  initializeView(): void {
     this.renderWindow = vtkRenderWindow.newInstance();
     this.renderer = vtkRenderer.newInstance({ background: [0.5, 0.5, 0.5] });
     this.renderWindow.addRenderer(this.renderer);
@@ -68,7 +70,7 @@ export class TridimensionalVisualisationComponent implements OnInit {
 
     this.mapper = vtkVolumeMapper.newInstance();
     this.actor = vtkVolume.newInstance();
-    
+
     this.actor.setMapper(this.mapper);
     this.renderer.addVolume(this.actor);
     this.renderer.resetCamera();
@@ -120,7 +122,7 @@ export class TridimensionalVisualisationComponent implements OnInit {
     this.addAnnotations();
   }
 
-  orientationMarker() {  
+  orientationMarker(): void {
     const axes = vtkAxesActor.newInstance();
     const orientationWidget = vtkOrientationMarkerWidget.newInstance({
       actor: axes,
@@ -135,7 +137,7 @@ export class TridimensionalVisualisationComponent implements OnInit {
     orientationWidget.setMaxPixelSize(300);
   }
 
-  addAnnotations() {
+  addAnnotations(): void {
     // Add corner annotation
     const cornerAnnotation = vtkCornerAnnotation.newInstance();
     cornerAnnotation.setContainer(this.openglRenderWindow.getContainer());
