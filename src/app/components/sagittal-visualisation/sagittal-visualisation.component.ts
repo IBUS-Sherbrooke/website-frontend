@@ -1,6 +1,6 @@
 import { ViewChild, ElementRef, Component, OnInit } from '@angular/core';
 
-import { VtkManagerService } from "../../services/vtk-manager/vtk-manager.service";
+import { VtkManagerService } from '../../services/vtk-manager/vtk-manager.service';
 
 import vtkImageMapper from 'vtk.js/Sources/Rendering/Core/ImageMapper';
 import vtkImageSlice from 'vtk.js/Sources/Rendering/Core/ImageSlice';

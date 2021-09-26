@@ -1,6 +1,6 @@
 import { ViewChild, ElementRef, Component, OnInit } from '@angular/core';
 
-import { VisualisationDataService } from "../../services/visualisation-Data/visualisation-data.service";
+import { VtkManagerService } from '../../services/vtk-manager/vtk-manager.service';
 
 import vtkImageMapper from 'vtk.js/Sources/Rendering/Core/ImageMapper';
 import vtkImageSlice from 'vtk.js/Sources/Rendering/Core/ImageSlice';
@@ -40,73 +40,36 @@ export class CoronalVisualisationComponent implements OnInit{
 
   @ViewChild('coronalDiv', {read: ElementRef}) coronalDiv: ElementRef;
 
-  constructor(private visualisationDataService: VisualisationDataService) { }
+  dataSource: any;
+  sagittalRepresentation: any;
+  viewProxy: any;
+  representation: any;
+
+  constructor(private vtkManagerService: VtkManagerService) { }
 
   ngOnInit(): void {
 
   }
-  
+
   ngAfterViewInit(): void {
     this.initializeView();
-    this.subscription = this.visualisationDataService.getData()
-      .subscribe(imageData => {
-        this.orientationMarker();
-        this.mapper.setInputData(imageData);
-        this.renderer.resetCamera();
-        this.renderWindow.render();
-        this.renderWindow.getViewProps();
-      }),
-      error => {
-        console.log(error);
-      }
+
+    this.dataSource = this.vtkManagerService.proxySource;
+
+    this.subscription = this.vtkManagerService.getSource().subscribe(source => {
+      this.representation = this.vtkManagerService.proxyManager.getRepresentation(source, this.viewProxy);
+      this.viewProxy.addRepresentation(this.representation);
+      this.viewProxy.render();
+    });
   }
 
   initializeView() {
-    this.renderWindow = vtkRenderWindow.newInstance();
-    this.renderer = vtkRenderer.newInstance({ background: [0, 0, 0] });
-    this.renderWindow.addRenderer(this.renderer);
-
-    this.mapper = vtkImageMapper.newInstance();
-    this.mapper.setSliceAtFocalPoint(true);
-    this.mapper.setSlicingMode(SlicingMode.Y);
-
-    this.actor = vtkImageSlice.newInstance();
-    this.actor.setMapper(this.mapper);
-    this.renderer.addActor(this.actor);
-    this.camera = this.renderer.getActiveCamera();   
-    this.camera.setParallelProjection(true);
-
-    this.camera.pitch(90);
-    this.camera.setViewUp([0, 1, 0]);
-    
-    this.openglRenderWindow = vtkOpenGLRenderWindow.newInstance();
-    this.renderWindow.addView(this.openglRenderWindow);
-
-    this.openglRenderWindow.setContainer(this.coronalDiv.nativeElement);
-
-    // ----------------------------------------------------------------------------
-    // Capture size of the container and set it to the renderWindow
-    // ----------------------------------------------------------------------------
-    const { width, height } = this.coronalDiv.nativeElement.getBoundingClientRect();
-    this.openglRenderWindow.setSize(width, height);
-
-    // ----------------------------------------------------------------------------
-    // Setup an interactor to handle mouse events
-    // ----------------------------------------------------------------------------
-    this.interactor = vtkRenderWindowInteractor.newInstance();
-    this.interactor.setView(this.openglRenderWindow);
-    this.interactor.initialize();
-    this.interactor.bindEvents(this.coronalDiv.nativeElement);
-
-    const iStyle = vtkInteractorStyleImage.newInstance();
-    iStyle.setInteractionMode("IMAGE_SLICING");
-    this.interactor.setInteractorStyle(iStyle);
-
-    this.addAnnotations();
+    this.viewProxy = this.vtkManagerService.proxyManager.createProxy('Views', 'CoronalView');
+    this.viewProxy.setContainer(this.coronalDiv.nativeElement);
+    this.viewProxy.resize();
   }
 
-  
-  orientationMarker() {   
+  orientationMarker() {
     const axes = vtkAxesActor.newInstance();
     const orientationWidget = vtkOrientationMarkerWidget.newInstance({
       actor: axes,
