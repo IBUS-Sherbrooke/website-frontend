@@ -57,7 +57,7 @@ export class VtkManagerService {
             options: {
               axis: 0,
               viewUp: [0, 0, 1],
-
+              orientation: -1,
             }
           },
           View3D: {
