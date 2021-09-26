@@ -44,6 +44,9 @@ export class SagittalVisualisationComponent implements OnInit {
   openglRenderWindow: any;
 
   subscription: Subscription;
+  dataSource: any;
+  sagittalRepresentation: any;
+  viewProxy: any;
 
   constructor(private vtkManagerService: VtkManagerService) { }
 
@@ -52,6 +55,20 @@ export class SagittalVisualisationComponent implements OnInit {
 
   ngAfterViewInit(): void {
     this.initializeView();
+    this.dataSource = this.vtkManagerService.proxySource;
+
+    /* this.subscription = this.vtkManagerService.getSource().subscribe(source => {
+      this.sagittalRepresentation = this.vtkManagerService.proxyManager.getRepresentation(this.dataSource, this.viewProxy);
+      this.viewProxy.addRepresentation(this.sagittalRepresentation);
+      this.viewProxy.render()
+    }) */
+    this.sagittalRepresentation = this.vtkManagerService.proxyManager.getRepresentation(this.dataSource, this.viewProxy);
+    this.viewProxy.addRepresentation(this.sagittalRepresentation);
+    this.viewProxy.render()
+
+    console.log('Inside Sagittal AfterInit')
+    console.log(this.sagittalRepresentation.getInput().getDataset());
+    
     /* this.subscription = this.vtkManagerService.getData()
       .subscribe(imageData => {
         this.orientationMarker();
@@ -65,7 +82,11 @@ export class SagittalVisualisationComponent implements OnInit {
   }
 
   initializeView() {
-    this.renderWindow = vtkRenderWindow.newInstance();
+    this.viewProxy = this.vtkManagerService.proxyManager.createProxy("Views", "SagittalView");
+    this.viewProxy.setContainer(this.sagittalDiv.nativeElement);
+    this.viewProxy.resize();
+
+   /*  this.renderWindow = vtkRenderWindow.newInstance();
     this.renderer = vtkRenderer.newInstance({ background: [0, 0, 0] });
     this.renderWindow.addRenderer(this.renderer);
 
@@ -98,7 +119,7 @@ export class SagittalVisualisationComponent implements OnInit {
     // ----------------------------------------------------------------------------
     /* this.interactor = vtkInteractorStyleImage.newInstance();
     this.interactor.setInteractionMode("IMAGE_SLICING");
-    this.renderWindow.getInteractor().setInteractorStyle(this.interactor); */
+    this.renderWindow.getInteractor().setInteractorStyle(this.interactor); 
     this.interactor = vtkRenderWindowInteractor.newInstance();
     this.interactor.setView(this.openglRenderWindow);
     this.interactor.initialize();
@@ -109,7 +130,7 @@ export class SagittalVisualisationComponent implements OnInit {
     iStyle.setInteractionMode("IMAGE_SLICING");
     this.interactor.setInteractorStyle(iStyle);
 
-    this.addAnnotations();
+    this.addAnnotations(); */
   }
 
   
