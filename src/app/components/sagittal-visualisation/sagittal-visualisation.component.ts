@@ -62,9 +62,9 @@ export class SagittalVisualisationComponent implements OnInit {
       this.viewProxy.addRepresentation(this.sagittalRepresentation);
       this.viewProxy.render()
     }) */
-    this.sagittalRepresentation = this.vtkManagerService.proxyManager.getRepresentation(this.dataSource, this.viewProxy);
+    /* this.sagittalRepresentation = this.vtkManagerService.proxyManager.getRepresentation(this.dataSource, this.viewProxy);
     this.viewProxy.addRepresentation(this.sagittalRepresentation);
-    this.viewProxy.render()
+    this.viewProxy.render() */
 
     console.log('Inside Sagittal AfterInit')
     console.log(this.sagittalRepresentation.getInput().getDataset());
@@ -82,9 +82,9 @@ export class SagittalVisualisationComponent implements OnInit {
   }
 
   initializeView() {
-    this.viewProxy = this.vtkManagerService.proxyManager.createProxy("Views", "SagittalView");
+    /* this.viewProxy = this.vtkManagerService.proxyManager.createProxy("Views", "SagittalView");
     this.viewProxy.setContainer(this.sagittalDiv.nativeElement);
-    this.viewProxy.resize();
+    this.viewProxy.resize(); */
 
    /*  this.renderWindow = vtkRenderWindow.newInstance();
     this.renderer = vtkRenderer.newInstance({ background: [0, 0, 0] });

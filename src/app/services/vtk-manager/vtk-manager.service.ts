@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
 
+import vtkLookupTableProxy from 'vtk.js/Sources/Proxy/Core/LookupTableProxy';
+import vtkPiecewiseFunctionProxy from 'vtk.js/Sources/Proxy/Core/PiecewiseFunctionProxy';
 import vtkProxyManager from 'vtk.js/Sources/Proxy/Core/ProxyManager';
 import vtkProxySource from 'vtk.js/Sources/Proxy/Core/SourceProxy';
 import vtkSliceRepresentationProxy from 'vtk.js/Sources/Proxy/Representations/SliceRepresentationProxy';
@@ -17,10 +19,18 @@ export class VtkManagerService {
 
   proxyManager;
   proxySource;
-  dataSubject: Subject<any>;
+  dataSubject = new Subject<any>();
   constructor(private visualisationDataService: VisualisationDataService) {
     const proxyConfiguration = { 
       definitions: {
+        Proxy: {
+          LookupTable: {
+            class: vtkLookupTableProxy
+          },
+          PiecewiseFunction: {
+            class: vtkPiecewiseFunctionProxy
+          }
+        },
         Sources : {
           DataProducer: { class: vtkProxySource, activateOnCreate: true }
         },
@@ -28,10 +38,10 @@ export class VtkManagerService {
           SagittalSlice : {
             class: vtkSliceRepresentationProxy,
             options: {
-              link: 'SagittalSlice',
+              /* link: 'SagittalSlice',
               property: 'slice',
               updateOnBind: true,
-              type: 'application'
+              type: 'application' */
             },
           },
           Volume: {
@@ -66,23 +76,16 @@ export class VtkManagerService {
       },
     };
     this.proxyManager = vtkProxyManager.newInstance({proxyConfiguration});
-    //console.log(this.proxyManager.get("proxyConfiguration"));
     this.proxySource = this.proxyManager.createProxy("Sources", "DataProducer");
-    /* console.log(this.proxyManager.get("proxyConfiguration"));
-    console.log(this.proxyManager.getSources());
-    console.log(this.proxyManager.getRepresentations()); */
 
     const dataTest = this.visualisationDataService.getData().subscribe(imageData => {
       this.proxySource.setInputData(imageData);
       this.dataSubject.next(this.proxySource);
     });
-    //console.log(dataTest);
-    //this.proxySource.setInputData(this.visualisationDataService.getData());
-    //console.log(this.proxySource.getDataset());
   }
 
   getSource(): any {
-    return this.proxySource;
+    return this.dataSubject.asObservable();
   }
 
 }
