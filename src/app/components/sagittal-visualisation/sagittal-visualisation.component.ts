@@ -47,94 +47,33 @@ export class SagittalVisualisationComponent implements OnInit {
   dataSource: any;
   sagittalRepresentation: any;
   viewProxy: any;
+  representation: any;
 
   constructor(private vtkManagerService: VtkManagerService) { }
 
   ngOnInit(): void {
   }
 
+
   ngAfterViewInit(): void {
     this.initializeView();
+
     this.dataSource = this.vtkManagerService.proxySource;
 
-    /* this.subscription = this.vtkManagerService.getSource().subscribe(source => {
-      this.sagittalRepresentation = this.vtkManagerService.proxyManager.getRepresentation(this.dataSource, this.viewProxy);
-      this.viewProxy.addRepresentation(this.sagittalRepresentation);
-      this.viewProxy.render()
-    }) */
-    /* this.sagittalRepresentation = this.vtkManagerService.proxyManager.getRepresentation(this.dataSource, this.viewProxy);
-    this.viewProxy.addRepresentation(this.sagittalRepresentation);
-    this.viewProxy.render() */
-
-    console.log('Inside Sagittal AfterInit')
-    console.log(this.sagittalRepresentation.getInput().getDataset());
-    
-    /* this.subscription = this.vtkManagerService.getData()
-      .subscribe(imageData => {
-        this.orientationMarker();
-        this.mapper.setInputData(imageData);
-        this.renderer.resetCamera();
-        this.renderWindow.render();
-      }),
-      error => {
-        console.log(error);
-      } */
+    this.subscription = this.vtkManagerService.getSource().subscribe(source => {
+      this.representation = this.vtkManagerService.proxyManager.getRepresentation(source, this.viewProxy);
+      this.viewProxy.addRepresentation(this.representation);
+      this.viewProxy.render();
+    });
   }
 
   initializeView() {
-    /* this.viewProxy = this.vtkManagerService.proxyManager.createProxy("Views", "SagittalView");
+    this.viewProxy = this.vtkManagerService.proxyManager.createProxy('Views', 'SagittalView');
     this.viewProxy.setContainer(this.sagittalDiv.nativeElement);
-    this.viewProxy.resize(); */
-
-   /*  this.renderWindow = vtkRenderWindow.newInstance();
-    this.renderer = vtkRenderer.newInstance({ background: [0, 0, 0] });
-    this.renderWindow.addRenderer(this.renderer);
-
-    this.mapper = vtkImageMapper.newInstance();
-    this.mapper.setSliceAtFocalPoint(true);
-    this.mapper.setSlicingMode(SlicingMode.X);
-
-    this.actor = vtkImageSlice.newInstance();
-    this.actor.setMapper(this.mapper);
-    this.renderer.addActor(this.actor);
-    this.camera = this.renderer.getActiveCamera();
-    this.camera.setParallelProjection(true);
-
-    this.camera.yaw(-90);
-    this.camera.setViewUp([0, 0, 1]);
-
-    this.openglRenderWindow = vtkOpenGLRenderWindow.newInstance();
-    this.renderWindow.addView(this.openglRenderWindow);
-
-    this.openglRenderWindow.setContainer(this.sagittalDiv.nativeElement);
-
-    // ----------------------------------------------------------------------------
-    // Capture size of the container and set it to the renderWindow
-    // ----------------------------------------------------------------------------
-    const { width, height } = this.sagittalDiv.nativeElement.getBoundingClientRect();
-    this.openglRenderWindow.setSize(width, height);
-
-    // ----------------------------------------------------------------------------
-    // Setup an interactor to handle mouse events
-    // ----------------------------------------------------------------------------
-    /* this.interactor = vtkInteractorStyleImage.newInstance();
-    this.interactor.setInteractionMode("IMAGE_SLICING");
-    this.renderWindow.getInteractor().setInteractorStyle(this.interactor); 
-    this.interactor = vtkRenderWindowInteractor.newInstance();
-    this.interactor.setView(this.openglRenderWindow);
-    this.interactor.initialize();
-    this.interactor.bindEvents(this.sagittalDiv.nativeElement);
-
-
-    const iStyle = vtkInteractorStyleImage.newInstance();
-    iStyle.setInteractionMode("IMAGE_SLICING");
-    this.interactor.setInteractorStyle(iStyle);
-
-    this.addAnnotations(); */
+    this.viewProxy.resize();
   }
 
-  
-  orientationMarker() {  
+  orientationMarker() {
     const axes = vtkAxesActor.newInstance();
     const orientationWidget = vtkOrientationMarkerWidget.newInstance({
       actor: axes,

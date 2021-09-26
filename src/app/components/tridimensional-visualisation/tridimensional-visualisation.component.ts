@@ -56,9 +56,8 @@ export class TridimensionalVisualisationComponent implements OnInit {
     this.subscription = this.vtkManagerService.getSource().subscribe(source => {
       this.tridimensionalRepresentation = this.vtkManagerService.proxyManager.getRepresentation(source, this.viewProxy);
       this.viewProxy.addRepresentation(this.tridimensionalRepresentation);
-      this.viewProxy.render()
-    })
-    
+      this.viewProxy.render();
+    });
   }
 
   initializeView() {

@@ -55,7 +55,9 @@ export class VtkManagerService {
           SagittalView: {
             class: vtkView2DProxy,
             options: {
-              
+              axis: 0,
+              viewUp: [0, 0, 1],
+
             }
           },
           View3D: {
