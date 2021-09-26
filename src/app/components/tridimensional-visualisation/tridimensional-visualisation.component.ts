@@ -1,6 +1,7 @@
 import { ViewChild, ElementRef, Component, OnInit } from '@angular/core';
 
 import { VisualisationDataService } from "../../services/visualisation-Data/visualisation-data.service";
+import { VtkManagerService } from "../../services/vtk-manager/vtk-manager.service";
 
 import vtkOpenGLRenderWindow from 'vtk.js/Sources/Rendering/OpenGL/RenderWindow';
 import vtkRenderWindow from 'vtk.js/Sources/Rendering/Core/RenderWindow';
@@ -36,17 +37,35 @@ export class TridimensionalVisualisationComponent implements OnInit {
   openglRenderWindow: any;
 
   subscription: Subscription;
+  dataSource: any;
+  tridimensionalRepresentation: any;
+  viewProxy: any;
 
   @ViewChild('tridimensionalDiv', {read: ElementRef}) tridimensionalDiv: ElementRef;
 
-  constructor(private visualisationDataService: VisualisationDataService) { }
+  constructor(private vtkManagerService: VtkManagerService) { }
 
   ngOnInit(): void {
   }
 
   ngAfterViewInit(): void {
     this.initializeView();
-    this.subscription = this.visualisationDataService.getData()
+
+    this.dataSource = this.vtkManagerService.proxySource;
+
+    this.subscription = this.vtkManagerService.getSource().subscribe(source => {
+      this.tridimensionalRepresentation = this.vtkManagerService.proxyManager.getRepresentation(this.dataSource, this.viewProxy);
+    this.viewProxy.addRepresentation(this.tridimensionalRepresentation);
+    this.viewProxy.render()
+    })
+    /* this.tridimensionalRepresentation = this.vtkManagerService.proxyManager.getRepresentation(this.dataSource, this.viewProxy);
+    this.viewProxy.addRepresentation(this.tridimensionalRepresentation);
+    this.viewProxy.render() */
+
+    console.log('Inside 3D AfterInit')
+    //console.log(this.tridimensionalRepresentation.getInput().getDataset());
+
+    /* this.subscription = this.visualisationDataService.getData()
       .subscribe(imageData => {
         this.orientationMarker();
         this.mapper.setInputData(imageData);
@@ -56,11 +75,14 @@ export class TridimensionalVisualisationComponent implements OnInit {
       }),
       error => {
         console.log(error);
-      }
+      } */
   }
 
   initializeView() {
-    this.renderWindow = vtkRenderWindow.newInstance();
+    this.viewProxy = this.vtkManagerService.proxyManager.createProxy("Views", "View3D");
+    this.viewProxy.setContainer(this.tridimensionalDiv.nativeElement);
+    this.viewProxy.resize();
+    /* this.renderWindow = vtkRenderWindow.newInstance();
     this.renderer = vtkRenderer.newInstance({ background: [0.5, 0.5, 0.5] });
     this.renderWindow.addRenderer(this.renderer);
 
@@ -117,7 +139,7 @@ export class TridimensionalVisualisationComponent implements OnInit {
 
     this.interactor.setInteractorStyle(vtkInteractorStyleTrackballCamera.newInstance());
 
-    this.addAnnotations();
+    this.addAnnotations(); */
   }
 
   orientationMarker() {  
