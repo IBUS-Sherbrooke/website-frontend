@@ -30,7 +30,7 @@
             "styles": [
               "src/styles.css"
             ],
-            "scripts": ["src/itk/web-build/HelloWorld.js"]
+            "scripts": ["src/itk/web-build/itk_filtering.js"]
           },
           "configurations": {
             "production": {
@@ -95,7 +95,7 @@
               "src/styles.css"
             ],
             "scripts": [
-              "src/itk/web-build/HelloWorld.js"]
+              "src/itk/web-build/itk_filtering.js"]
           }
         },
         "lint": {

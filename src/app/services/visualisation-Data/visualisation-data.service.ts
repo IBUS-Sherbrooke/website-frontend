@@ -18,7 +18,6 @@ export class VisualisationDataService {
     readImageDICOMFileSeries(files).then(image => {
       let data = ITKHelper.convertItkToVtkImage(image.image)
       let data_autre = ITKHelper.convertVtkToItkImage(data);
-      console.log(data);
       this.visualisationData.next(data);
       this.raw_data.next(data_autre);
     })

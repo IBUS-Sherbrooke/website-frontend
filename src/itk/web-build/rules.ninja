@@ -6,7 +6,7 @@
 # It is included in the main 'build.ninja'.
 
 # =============================================================================
-# Project: HelloWorld
+# Project: itk_filtering
 # Configurations: Release
 # =============================================================================
 # =============================================================================
@@ -22,7 +22,7 @@ rule CUSTOM_COMMAND
 #############################################
 # Rule for compiling CXX files.
 
-rule CXX_COMPILER__HelloWorldWasm_Release
+rule CXX_COMPILER__itk_filteringWasm_Release
   depfile = $DEP_FILE
   deps = gcc
   command = /emsdk_portable/emscripten/sdk/em++  $DEFINES $INCLUDES $FLAGS -MD -MT $out -MF $DEP_FILE -o $out -c $in
@@ -32,7 +32,7 @@ rule CXX_COMPILER__HelloWorldWasm_Release
 #############################################
 # Rule for linking CXX executable.
 
-rule CXX_EXECUTABLE_LINKER__HelloWorldWasm_Release
+rule CXX_EXECUTABLE_LINKER__itk_filteringWasm_Release
   command = $PRE_LINK && /emsdk_portable/emscripten/sdk/em++  $FLAGS  $LINK_FLAGS $in  -o $TARGET_FILE $LINK_PATH $LINK_LIBRARIES && $POST_BUILD
   description = Linking CXX executable $TARGET_FILE
   restat = $RESTAT
@@ -41,7 +41,7 @@ rule CXX_EXECUTABLE_LINKER__HelloWorldWasm_Release
 #############################################
 # Rule for compiling CXX files.
 
-rule CXX_COMPILER__HelloWorld_Release
+rule CXX_COMPILER__itk_filtering_Release
   depfile = $DEP_FILE
   deps = gcc
   command = /emsdk_portable/emscripten/sdk/em++  $DEFINES $INCLUDES $FLAGS -MD -MT $out -MF $DEP_FILE -o $out -c $in
@@ -51,7 +51,7 @@ rule CXX_COMPILER__HelloWorld_Release
 #############################################
 # Rule for linking CXX executable.
 
-rule CXX_EXECUTABLE_LINKER__HelloWorld_Release
+rule CXX_EXECUTABLE_LINKER__itk_filtering_Release
   command = $PRE_LINK && /emsdk_portable/emscripten/sdk/em++  $FLAGS  $LINK_FLAGS $in  -o $TARGET_FILE $LINK_PATH $LINK_LIBRARIES && $POST_BUILD
   description = Linking CXX executable $TARGET_FILE
   restat = $RESTAT

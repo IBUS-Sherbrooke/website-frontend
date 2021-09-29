@@ -57,6 +57,7 @@ module.exports = {
         from: path.join(__dirname, 'node_modules', 'itk', 'MeshIOs'),
         to: path.join(__dirname, 'dist', 'itk', 'MeshIOs'),
         },
+        
         {
         from: "src/assets",
         to: "assets",
