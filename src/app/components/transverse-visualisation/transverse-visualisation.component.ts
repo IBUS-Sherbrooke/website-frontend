@@ -66,6 +66,9 @@ export class TransverseVisualisationComponent implements OnInit {
   initializeView() {
     this.viewProxy = this.vtkManagerService.proxyManager.createProxy('Views', 'TransverseView');
     this.viewProxy.setContainer(this.transverseDiv.nativeElement);
+    this.viewProxy.getCornerAnnotation().updateTemplates({
+      nw() { return `Transverse`; }
+    });
     this.viewProxy.resize();
   }
 
@@ -82,16 +85,5 @@ export class TransverseVisualisationComponent implements OnInit {
     orientationWidget.setViewportSize(0.15);
     orientationWidget.setMinPixelSize(100);
     orientationWidget.setMaxPixelSize(300);
-  }
-
-  addAnnotations() {
-    // Add corner annotation
-    const cornerAnnotation = vtkCornerAnnotation.newInstance();
-    cornerAnnotation.setContainer(this.openglRenderWindow.getContainer());
-    cornerAnnotation.getAnnotationContainer().style.color = 'white';
-    /* cornerAnnotation.updateMetadata(); */
-    cornerAnnotation.updateTemplates({
-      nw() { return `Transverse`; }
-    });
   }
 }

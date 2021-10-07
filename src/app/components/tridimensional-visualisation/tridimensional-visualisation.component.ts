@@ -63,10 +63,9 @@ export class TridimensionalVisualisationComponent implements OnInit {
   initializeView() {
     this.viewProxy = this.vtkManagerService.proxyManager.createProxy('Views', 'View3D');
     this.viewProxy.setContainer(this.tridimensionalDiv.nativeElement);
-    this.viewProxy.setCornerAnnotation(vtkOrientationMarkerWidget.Corners.TOP_LEFT, {
+    this.viewProxy.getCornerAnnotation().updateTemplates({
       nw() { return `3D`; }
     });
-    this.viewProxy.updateCornerAnnotation();
     this.viewProxy.resize();
 /*
     this.viewProxy.volume.getProperty().setScalarOpacityUnitDistance(0, 3.0);
@@ -91,17 +90,6 @@ export class TridimensionalVisualisationComponent implements OnInit {
     orientationWidget.setViewportSize(0.15);
     orientationWidget.setMinPixelSize(100);
     orientationWidget.setMaxPixelSize(300);
-  }
-
-  addAnnotations() {
-    // Add corner annotation
-    const cornerAnnotation = vtkCornerAnnotation.newInstance();
-    cornerAnnotation.getAnnotationContainer().style.color = 'white';
-    /* cornerAnnotation.updateMetadata(); */
-    cornerAnnotation.updateTemplates({
-      nw() { return `3D`; }
-    });
-    return cornerAnnotation;
   }
 }
 

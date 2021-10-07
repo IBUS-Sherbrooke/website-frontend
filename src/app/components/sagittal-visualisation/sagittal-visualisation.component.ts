@@ -70,6 +70,9 @@ export class SagittalVisualisationComponent implements OnInit {
   initializeView() {
     this.viewProxy = this.vtkManagerService.proxyManager.createProxy('Views', 'SagittalView');
     this.viewProxy.setContainer(this.sagittalDiv.nativeElement);
+    this.viewProxy.getCornerAnnotation().updateTemplates({
+      nw() { return `Sagittal`; }
+    });
     this.viewProxy.resize();
   }
 
@@ -86,16 +89,5 @@ export class SagittalVisualisationComponent implements OnInit {
     orientationWidget.setViewportSize(0.15);
     orientationWidget.setMinPixelSize(100);
     orientationWidget.setMaxPixelSize(300);
-  }
-
-  addAnnotations() {
-    // Add corner annotation
-    const cornerAnnotation = vtkCornerAnnotation.newInstance();
-    cornerAnnotation.setContainer(this.openglRenderWindow.getContainer());
-    cornerAnnotation.getAnnotationContainer().style.color = 'white';
-    /* cornerAnnotation.updateMetadata(); */
-    cornerAnnotation.updateTemplates({
-      nw() { return `Sagittal`; }
-    });
   }
 }
