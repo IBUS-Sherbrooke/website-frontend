@@ -53,35 +53,66 @@ export class VtkManagerService {
         Representations: {
           CoronalSlice : {
             class: vtkSliceRepresentationProxy,
-            options: {/*
-              link: 'CoronalSlice',
-              property: 'visibility',
-              updateOnBind: true,
-              type: 'application',*/
+            options: {
+              links: [
+                {
+                  link: 'CoronalSlice',
+                  property: 'windowLevel',
+                  updateOnBind: true,
+                },
+                {
+                  link: 'CoronalSlice',
+                  property: 'windowWidth',
+                  updateOnBind: true,
+                }
+              ],
+              ui: [],
+              definitionOptions: {},
             },
           },
           SagittalSlice : {
             class: vtkSliceRepresentationProxy,
-            options: {/*
-              link: 'SagittalSlice',
-              property: 'visibility',
-              updateOnBind: true,
-              type: 'application',*/
+            options: {
+              links: [
+                {
+                  link: 'SagittalSlice',
+                  property: 'windowLevel',
+                  updateOnBind: true,
+                },
+                {
+                  link: 'SagittalSlice',
+                  property: 'windowWidth',
+                  updateOnBind: true,
+                }
+              ],
+              ui: [],
+              definitionOptions: {},
             },
           },
           TransverseSlice : {
             class: vtkSliceRepresentationProxy,
-            options: {/*
-              link: 'TransverseSlice',
-              property: 'visibility',
-              updateOnBind: true,
-              type: 'application',*/
+            options: {
+              links: [
+                {
+                  link: 'TransverseSlice',
+                  property: 'windowLevel',
+                  updateOnBind: true,
+                },
+                {
+                  link: 'TransverseSlice',
+                  property: 'windowWidth',
+                  updateOnBind: true,
+                }
+              ],
+              ui: [],
+              definitionOptions: {},
             },
           },
           Volume: {
             class: vtkVolumeRepresentationProxy,
             options: {
               edgeGradient: 0.2,
+
             }
           }
         },
@@ -139,9 +170,49 @@ export class VtkManagerService {
     this.proxyManager = vtkProxyManager.newInstance({proxyConfiguration});
     this.proxySource = this.proxyManager.createProxy('Sources', 'DataProducer');
 
+
+  const animate = (p) => {
+    this.proxyManager.getRepresentations().forEach(rep => {
+      rep.setWindowLevel(p.getWindowLevel());
+      rep.setWindowWidth(p.getWindowWidth());
+    });
+    
+    this.proxyManager.autoAnimateViews();
+  }
+
     const dataTest = this.visualisationDataService.getData().subscribe(imageData => {
       this.proxySource.setInputData(imageData);
       this.dataSubject.next(this.proxySource);
+
+      const groups = this.proxyManager.getProxyGroups();
+      let proxies = [];
+
+      for (let i = 0; i < groups.length; i += 1) {
+        const name = groups[i];
+
+          proxies = proxies.concat(
+            this.proxyManager.getProxyInGroup(name)
+          );        
+      }
+
+      const pxmSubs = [];
+      const proxySubs = {};
+
+      pxmSubs.push(
+        this.proxyManager.onProxyRegistrationChange((info) => {
+          const { action, proxyId, proxy } = info;
+          if (action === 'register') {
+            proxySubs[proxyId] = proxy.onModified((p) => {
+              animate(p);
+            });
+          } else if (action === 'unregister') {
+            if (proxyId in proxySubs) {
+              proxySubs[proxyId].unsubscribe();
+              delete proxySubs[proxyId];
+            }
+          }
+        })
+      );
     });
   }
 
