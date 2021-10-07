@@ -41,7 +41,7 @@ export class VtkManagerService {
           PiecewiseFunction: {
             class: vtkPiecewiseFunctionProxy,
             options: {
-              mode: 1,
+              mode: 2,
               points: [
                 [-1000, 0],
                 [152.19, 0],
