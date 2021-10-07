@@ -41,7 +41,7 @@ export class VtkManagerService {
           PiecewiseFunction: {
             class: vtkPiecewiseFunctionProxy,
             options: {
-              mode: 0,
+              mode: 1,
               points: [
                 [-1000, 0],
                 [152.19, 0],
@@ -115,7 +115,7 @@ export class VtkManagerService {
           Volume: {
             class: vtkVolumeRepresentationProxy,
             options: {
-              edgeGradient: 0.2,
+              edgeGradient: 1,
             }
           }
         },
@@ -153,7 +153,9 @@ export class VtkManagerService {
           View3D: {
             class: vtkViewProxy,
             options: {
-
+              axis: 1,
+              viewUp: [0, 1, 0],
+              orientation: -1,
             }
           }
         }
