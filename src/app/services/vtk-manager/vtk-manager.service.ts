@@ -126,6 +126,7 @@ export class VtkManagerService {
               axis: 1,
               viewUp: [0, 1, 0],
               orientation: -1,
+              useParallelRendering: true,
               // sliceRepresentationSubscriptions: ['SagittalSlice', 'TransverseSlice'],
             }
           },
@@ -135,6 +136,7 @@ export class VtkManagerService {
               axis: 0,
               viewUp: [0, 0, 1],
               orientation: -1,
+              useParallelRendering: true,
               // sliceRepresentationSubscriptions: ['CoronalSlice', 'TransverseSlice'],
             }
           },
@@ -143,7 +145,8 @@ export class VtkManagerService {
             options: {
               axis: 2,
               viewUp: [0, 1, 0],
-              orientation: -1,
+              orientation: 1,
+              useParallelRendering: true,
               // sliceRepresentationSubscriptions: ['CoronalSlice', 'SagittalSlice'],
             }
           },
