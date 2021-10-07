@@ -170,24 +170,13 @@ export class VtkManagerService {
     this.proxyManager = vtkProxyManager.newInstance({proxyConfiguration});
     this.proxySource = this.proxyManager.createProxy('Sources', 'DataProducer');
 
-  // if (hooks.onActiveSourceChange) {
-  //   pxmSubs.push(
-  //     this.$proxyManager.onActiveSourceChange((s) =>
-  //       hooks.onActiveSourceChange.call(this, s)
-  //     )
-  //   );
-  // }
 
-  // if (hooks.onActiveViewChange) {
-  //   pxmSubs.push(
-  //     this.$proxyManager.onActiveViewChange((v) =>
-  //       hooks.onActiveViewChange.call(this, v)
-  //     )
-  //   );
-  // }
-
-  const animate = () => {
-    console.log("ANIMATIINGGGG");
+  const animate = (p) => {
+    this.proxyManager.getRepresentations().forEach(rep => {
+      rep.setWindowLevel(p.getWindowLevel());
+      rep.setWindowWidth(p.getWindowWidth());
+    });
+    
     this.proxyManager.autoAnimateViews();
   }
 
@@ -196,41 +185,34 @@ export class VtkManagerService {
       this.dataSubject.next(this.proxySource);
 
       const groups = this.proxyManager.getProxyGroups();
-      console.log("Groups: ", groups);
-    let proxies = [];
-    for (let i = 0; i < groups.length; i += 1) {
-      const name = groups[i];
-      proxies = proxies.concat(
-        this.proxyManager.getProxyInGroup(name)
-      );
-    }
+      let proxies = [];
 
-    console.log("Proxies: ", proxies);
-    for (let i = 0; i < proxies.length; i += 1) {
-      const proxy = proxies[i];
-      proxy.onModified((p) =>
-        animate()
-      );
-    }
+      for (let i = 0; i < groups.length; i += 1) {
+        const name = groups[i];
 
-    const pxmSubs = [];
-    const proxySubs = {};
+          proxies = proxies.concat(
+            this.proxyManager.getProxyInGroup(name)
+          );        
+      }
 
-    pxmSubs.push(
-      this.proxyManager.onProxyRegistrationChange((info) => {
-        const { action, proxyId, proxy } = info;
-        if (action === 'register') {
-          proxySubs[proxyId] = proxy.onModified((p) =>
-            animate()
-          );
-        } else if (action === 'unregister') {
-          if (proxyId in proxySubs) {
-            proxySubs[proxyId].unsubscribe();
-            delete proxySubs[proxyId];
+      const pxmSubs = [];
+      const proxySubs = {};
+
+      pxmSubs.push(
+        this.proxyManager.onProxyRegistrationChange((info) => {
+          const { action, proxyId, proxy } = info;
+          if (action === 'register') {
+            proxySubs[proxyId] = proxy.onModified((p) => {
+              animate(p);
+            });
+          } else if (action === 'unregister') {
+            if (proxyId in proxySubs) {
+              proxySubs[proxyId].unsubscribe();
+              delete proxySubs[proxyId];
+            }
           }
-        }
-      })
-    );
+        })
+      );
     });
   }
 
