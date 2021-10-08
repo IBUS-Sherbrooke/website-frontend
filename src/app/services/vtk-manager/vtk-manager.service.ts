@@ -27,18 +27,22 @@ export class VtkManagerService {
         Proxy: {
           LookupTable: {
             class: vtkLookupTableProxy,
-            options: [
-              [-1000, 0.3, 0.3, 1],
-              [-488, 0.3, 1, 0.3],
-              [463.28, 1, 0, 0],
-              [659.15, 1, 0.912535, 0.0374849],
-              [953, 1, 0.3, 0.3],
-            ],
+            options: {
+              mode: 1,
+              rgbPoints: [
+                [-1000, 0.3, 0.3, 1],
+                [-488, 0.3, 1, 0.3],
+                [463.28, 1, 0, 0],
+                [659.15, 1, 0.912535, 0.0374849],
+                [953, 1, 0.3, 0.3],
+              ],
+            },
           },
           PiecewiseFunction: {
             class: vtkPiecewiseFunctionProxy,
             options: {
-              Points: [
+              mode: 2,
+              points: [
                 [-1000, 0],
                 [152.19, 0],
                 [278.93, 0.190476],
@@ -111,8 +115,7 @@ export class VtkManagerService {
           Volume: {
             class: vtkVolumeRepresentationProxy,
             options: {
-              edgeGradient: 0.2,
-
+              edgeGradient: 1,
             }
           }
         },
@@ -123,6 +126,7 @@ export class VtkManagerService {
               axis: 1,
               viewUp: [0, 1, 0],
               orientation: -1,
+              useParallelRendering: true,
               // sliceRepresentationSubscriptions: ['SagittalSlice', 'TransverseSlice'],
             }
           },
@@ -132,6 +136,7 @@ export class VtkManagerService {
               axis: 0,
               viewUp: [0, 0, 1],
               orientation: -1,
+              useParallelRendering: true,
               // sliceRepresentationSubscriptions: ['CoronalSlice', 'TransverseSlice'],
             }
           },
@@ -140,14 +145,17 @@ export class VtkManagerService {
             options: {
               axis: 2,
               viewUp: [0, 1, 0],
-              orientation: -1,
+              orientation: 1,
+              useParallelRendering: true,
               // sliceRepresentationSubscriptions: ['CoronalSlice', 'SagittalSlice'],
             }
           },
           View3D: {
             class: vtkViewProxy,
             options: {
-
+              axis: 1,
+              viewUp: [0, 1, 0],
+              orientation: -1,
             }
           }
         }
@@ -171,14 +179,14 @@ export class VtkManagerService {
     this.proxySource = this.proxyManager.createProxy('Sources', 'DataProducer');
 
 
-  const animate = (p) => {
-    this.proxyManager.getRepresentations().forEach(rep => {
-      rep.setWindowLevel(p.getWindowLevel());
-      rep.setWindowWidth(p.getWindowWidth());
-    });
-    
-    this.proxyManager.autoAnimateViews();
-  }
+    const animate = (p) => {
+      this.proxyManager.getRepresentations().forEach(rep => {
+        rep.setWindowLevel(p.getWindowLevel());
+        rep.setWindowWidth(p.getWindowWidth());
+      });
+
+      this.proxyManager.autoAnimateViews();
+    };
 
     const dataTest = this.visualisationDataService.getData().subscribe(imageData => {
       this.proxySource.setInputData(imageData);
@@ -190,9 +198,9 @@ export class VtkManagerService {
       for (let i = 0; i < groups.length; i += 1) {
         const name = groups[i];
 
-          proxies = proxies.concat(
+        proxies = proxies.concat(
             this.proxyManager.getProxyInGroup(name)
-          );        
+          );
       }
 
       const pxmSubs = [];
