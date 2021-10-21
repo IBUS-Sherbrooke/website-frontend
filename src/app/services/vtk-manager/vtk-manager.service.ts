@@ -17,6 +17,7 @@ import { Observable, Subject } from 'rxjs';
 })
 export class VtkManagerService {
 
+  nextScale: number = -1;
   proxyManager;
   proxySource;
   piecewiseFunctionProxy;
@@ -226,9 +227,23 @@ export class VtkManagerService {
 
   flipViewsProxy(): any {
     const test = this.proxyManager.getViews();
+    let representation;
+    let axis;
+    let volume;
+
     test.forEach(view => {
-      view.rotate(180);
+      representation = view.getRepresentations()[0];
+      
+      if (!representation.getVolumes().length) {
+        axis = view.getAxis();
+        representation.getActors()[0].setScale(axis ? this.nextScale : 1, axis ? 1 : this.nextScale, 1);
+      }
+      else {
+        volume = representation.getVolumes()[0].setScale(this.nextScale, 1, 1);
+      }
     });
+
+    this.nextScale = -1 * this.nextScale;
   }
 
   getSource(): any {
