@@ -224,6 +224,13 @@ export class VtkManagerService {
     });
   }
 
+  flipViewsProxy(): any {
+    const test = this.proxyManager.getViews();
+    test.forEach(view => {
+      view.rotate(180);
+    });
+  }
+
   getSource(): any {
     return this.dataSubject.asObservable();
   }
