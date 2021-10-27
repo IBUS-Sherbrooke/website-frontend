@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { VtkManagerService } from '../../services/vtk-manager/vtk-manager.service';
 
 @Component({
   selector: 'app-tools-controller',
@@ -7,9 +8,12 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ToolsControllerComponent implements OnInit {
 
-  constructor() { }
+  constructor(private vtkManagerService: VtkManagerService) { }
 
   ngOnInit(): void {
   }
 
+  flipViews(): void {
+    this.vtkManagerService.flipViewsProxy();
+  }
 }
