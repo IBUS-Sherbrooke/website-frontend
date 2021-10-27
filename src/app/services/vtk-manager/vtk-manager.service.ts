@@ -21,6 +21,7 @@ export class VtkManagerService {
   proxyManager;
   proxySource;
   piecewiseFunctionProxy;
+  window = new Subject<any>();
   dataSubject = new Subject<any>();
   constructor(private visualisationDataService: VisualisationDataService) {
     const proxyConfiguration = {
@@ -185,7 +186,7 @@ export class VtkManagerService {
         rep.setWindowLevel(p.getWindowLevel());
         rep.setWindowWidth(p.getWindowWidth());
       });
-
+      this.window.next(p);
       this.proxyManager.autoAnimateViews();
     };
 
@@ -245,9 +246,30 @@ export class VtkManagerService {
 
     this.nextScale = -1 * this.nextScale;
   }
+  
+  setWindowLevel(percent): void {
+    const representations = this.proxyManager.getRepresentations();
+    if (representations) {
+      const rep = representations[0];
+      const domain = rep.getPropertyDomainByName('windowLevel');
+      rep.setWindowLevel((percent * (domain.max - domain.min)) + domain.min);
+    }
+  }
+
+  setWindowWidth(percent): void {
+    const representations = this.proxyManager.getRepresentations();
+    if (representations) {
+      const rep = representations[0];
+      const domain = rep.getPropertyDomainByName('windowWidth');
+      rep.setWindowWidth((percent * (domain.max - domain.min)) + domain.min);
+    }
+  }
 
   getSource(): any {
     return this.dataSubject.asObservable();
   }
 
+  getWindow(): any {
+    return this.window.asObservable();
+  }
 }
