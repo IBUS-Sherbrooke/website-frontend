@@ -226,12 +226,12 @@ export class VtkManagerService {
   }
 
   flipViewsProxy(): any {
-    const test = this.proxyManager.getViews();
+    const views = this.proxyManager.getViews();
     let representation;
     let axis;
     let volume;
 
-    test.forEach(view => {
+    views.forEach(view => {
       representation = view.getRepresentations()[0];
       
       if (!representation.getVolumes().length) {
