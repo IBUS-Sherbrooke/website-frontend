@@ -248,18 +248,16 @@ export class VtkManagerService {
   }
   
   setWindowLevel(percent): void {
-    const representations = this.proxyManager.getRepresentations();
-    if (representations) {
-      const rep = representations[0];
+    const rep = this.proxyManager.getRepresentations()[0];
+    if (rep) {
       const domain = rep.getPropertyDomainByName('windowLevel');
       rep.setWindowLevel((percent * (domain.max - domain.min)) + domain.min);
     }
   }
 
   setWindowWidth(percent): void {
-    const representations = this.proxyManager.getRepresentations();
-    if (representations) {
-      const rep = representations[0];
+    const rep = this.proxyManager.getRepresentations()[0];
+    if (rep) {
       const domain = rep.getPropertyDomainByName('windowWidth');
       rep.setWindowWidth((percent * (domain.max - domain.min)) + domain.min);
     }
