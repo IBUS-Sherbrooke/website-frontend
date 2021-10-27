@@ -85,6 +85,7 @@
 /* App view styling */
 .view-container {
   height: 100%;
+  background-color: #000;
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   grid-template-rows: repeat(2, minmax(0, 1fr));
