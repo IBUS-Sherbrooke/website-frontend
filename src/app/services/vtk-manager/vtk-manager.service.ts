@@ -181,13 +181,22 @@ export class VtkManagerService {
     this.proxySource = this.proxyManager.createProxy('Sources', 'DataProducer');
 
 
-    const animate = (p) => {
-      this.proxyManager.getRepresentations().forEach(rep => {
-        rep.setWindowLevel(p.getWindowLevel());
-        rep.setWindowWidth(p.getWindowWidth());
+    const animate = (p: any) => {
+      let isWindowEvent = false;
+
+      this.proxyManager.getRepresentations().forEach((rep: any) => {
+        if (p && p.getWindowLevel !== undefined && p.getWindowWidth !== undefined) {
+          isWindowEvent = true;
+
+          rep.setWindowLevel(p.getWindowLevel());
+          rep.setWindowWidth(p.getWindowWidth());
+        }
       });
-      this.window.next(p);
-      this.proxyManager.autoAnimateViews();
+
+      if (isWindowEvent) {
+        this.proxyManager.autoAnimateViews();
+        this.window.next(p);
+      }      
     };
 
     const dataTest = this.visualisationDataService.getData().subscribe(imageData => {
@@ -209,10 +218,10 @@ export class VtkManagerService {
       const proxySubs = {};
 
       pxmSubs.push(
-        this.proxyManager.onProxyRegistrationChange((info) => {
+        this.proxyManager.onProxyRegistrationChange((info: any) => {
           const { action, proxyId, proxy } = info;
           if (action === 'register') {
-            proxySubs[proxyId] = proxy.onModified((p) => {
+            proxySubs[proxyId] = proxy.onModified((p: any) => {
               animate(p);
             });
           } else if (action === 'unregister') {
@@ -227,24 +236,29 @@ export class VtkManagerService {
   }
 
   flipViewsProxy(): any {
-    const test = this.proxyManager.getViews();
-    let representation;
-    let axis;
-    let volume;
+    const views = this.proxyManager.getViews();
+    let representation: any;
+    let axis: any;
+    let volume: any;
+    let wasFlipMade = true;
 
-    test.forEach(view => {
+    views.forEach(view => {
       representation = view.getRepresentations()[0];
       
-      if (!representation.getVolumes().length) {
+      if (representation !== undefined && !representation.getVolumes().length) {
         axis = view.getAxis();
         representation.getActors()[0].setScale(axis ? this.nextScale : 1, axis ? 1 : this.nextScale, 1);
       }
-      else {
+      else if (representation !== undefined) {
         volume = representation.getVolumes()[0].setScale(this.nextScale, 1, 1);
+      } else {
+        wasFlipMade = false;
       }
     });
 
-    this.nextScale = -1 * this.nextScale;
+    if (wasFlipMade) {
+      this.nextScale = -1 * this.nextScale;
+    }
   }
   
   setWindowLevel(percent): void {
