@@ -1,1 +1,11 @@
-<button  (click)="flipViews()">Flip views</button>
+<div class="controller">
+    <button  (click)="flipViews()">Flip views</button>
+    <div class="slidercontainer">
+        Window luminosity:
+        <input id="windowLevel" type="range" min="0" max="1" step="0.001" value="0.5" (input)="setWindowLevel($event.target.value)"/>
+    </div>
+    <div class="slidercontainer">
+        Window opacity:
+        <input id="windowWidth" type="range" min="0" max="1" step="0.001" value="0.5" (input)="setWindowWidth($event.target.value)"/>
+    </div>
+</div>
