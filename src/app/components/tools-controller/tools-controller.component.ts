@@ -18,11 +18,15 @@ export class ToolsControllerComponent implements OnInit {
       const levelDomain = p.getPropertyDomainByName('windowLevel');
       const widthDomain = p.getPropertyDomainByName('windowWidth');
       this.canUpdate = false;
-      (document.getElementById('windowLevel') as any).value = 1 - (p.getWindowLevel() - levelDomain.min) / 
+      (document.getElementById('windowLevel') as any).value = 1 - (p.getWindowLevel() - levelDomain.min) /
         (levelDomain.max - levelDomain.min);
       (document.getElementById('windowWidth') as any).value = (p.getWindowWidth() - widthDomain.min) / (widthDomain.max - widthDomain.min);
       this.canUpdate = true;
     });
+  }
+
+  flipViews(): void {
+    this.vtkManagerService.flipViewsProxy();
   }
 
   setWindowLevel(percent): void {
@@ -30,10 +34,7 @@ export class ToolsControllerComponent implements OnInit {
       this.vtkManagerService.setWindowLevel(1 - percent);
     }
   }
-
-  flipViews(): void {
-    this.vtkManagerService.flipViewsProxy();
-  }
+  
   setWindowWidth(percent): void {
     if (this.canUpdate) {
       this.vtkManagerService.setWindowWidth(percent);
