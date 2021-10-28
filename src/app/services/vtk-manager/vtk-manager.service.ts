@@ -237,23 +237,28 @@ export class VtkManagerService {
 
   flipViewsProxy(): any {
     const views = this.proxyManager.getViews();
-    let representation;
-    let axis;
-    let volume;
+    let representation: any;
+    let axis: any;
+    let volume: any;
+    let wasFlipMade = true;
 
     views.forEach(view => {
       representation = view.getRepresentations()[0];
       
-      if (!representation.getVolumes().length) {
+      if (representation !== undefined && !representation.getVolumes().length) {
         axis = view.getAxis();
         representation.getActors()[0].setScale(axis ? this.nextScale : 1, axis ? 1 : this.nextScale, 1);
       }
-      else {
+      else if (representation !== undefined) {
         volume = representation.getVolumes()[0].setScale(this.nextScale, 1, 1);
+      } else {
+        wasFlipMade = false;
       }
     });
 
-    this.nextScale = -1 * this.nextScale;
+    if (wasFlipMade) {
+      this.nextScale = -1 * this.nextScale;
+    }
   }
   
   setWindowLevel(percent): void {
