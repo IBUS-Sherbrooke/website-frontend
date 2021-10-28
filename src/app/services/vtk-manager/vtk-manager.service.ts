@@ -18,9 +18,11 @@ import { Observable, Subject } from 'rxjs';
 export class VtkManagerService {
 
   nextScale: number = -1;
-  proxyManager;
-  proxySource;
-  piecewiseFunctionProxy;
+  proxyManager: any;
+  proxySource: any;
+  piecewiseFunctionProxy: any;
+  lastWindowLevel: Number;
+  lastWindowWidth: Number;
   window = new Subject<any>();
   dataSubject = new Subject<any>();
   constructor(private visualisationDataService: VisualisationDataService) {
@@ -182,21 +184,26 @@ export class VtkManagerService {
 
 
     const animate = (p: any) => {
-      let isWindowEvent = false;
+      if (!p || p.getWindowLevel === undefined || p.getWindowWidth === undefined){
+        return false;
+      }
+
+      if (this.lastWindowLevel && this.lastWindowLevel === p.getWindowLevel() && this.lastWindowWidth && this.lastWindowWidth === p.getWindowWidth()) {
+        return false;
+      }
+
+      this.lastWindowLevel = p.getWindowLevel();
+      this.lastWindowWidth = p.getWindowWidth();
 
       this.proxyManager.getRepresentations().forEach((rep: any) => {
-        if (p && p.getWindowLevel !== undefined && p.getWindowWidth !== undefined) {
-          isWindowEvent = true;
-
           rep.setWindowLevel(p.getWindowLevel());
           rep.setWindowWidth(p.getWindowWidth());
-        }
       });
 
-      if (isWindowEvent) {
-        this.proxyManager.autoAnimateViews();
-        this.window.next(p);
-      }      
+      this.proxyManager.autoAnimateViews();
+      this.window.next(p);
+
+      return true;
     };
 
     const dataTest = this.visualisationDataService.getData().subscribe(imageData => {
@@ -258,6 +265,7 @@ export class VtkManagerService {
 
     if (wasFlipMade) {
       this.nextScale = -1 * this.nextScale;
+      this.proxyManager.autoAnimateViews();
     }
   }
   
