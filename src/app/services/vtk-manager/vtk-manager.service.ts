@@ -181,12 +181,20 @@ export class VtkManagerService {
 
 
     const animate = (p) => {
-      this.proxyManager.getRepresentations().forEach(rep => {
-        rep.setWindowLevel(p.getWindowLevel());
-        rep.setWindowWidth(p.getWindowWidth());
+      let isWindowEvent = false;
+
+      this.proxyManager.getRepresentations().forEach((rep: any) => {
+        if (p && p.getWindowLevel !== undefined && p.getWindowWidth !== undefined) {
+          isWindowEvent = true;
+
+          rep.setWindowLevel(p.getWindowLevel());
+          rep.setWindowWidth(p.getWindowWidth());
+        }
       });
 
-      this.proxyManager.autoAnimateViews();
+      if (isWindowEvent) {
+        this.proxyManager.autoAnimateViews();
+      }
     };
 
     const dataTest = this.visualisationDataService.getData().subscribe(imageData => {
@@ -208,10 +216,10 @@ export class VtkManagerService {
       const proxySubs = {};
 
       pxmSubs.push(
-        this.proxyManager.onProxyRegistrationChange((info) => {
+        this.proxyManager.onProxyRegistrationChange((info: any) => {
           const { action, proxyId, proxy } = info;
           if (action === 'register') {
-            proxySubs[proxyId] = proxy.onModified((p) => {
+            proxySubs[proxyId] = proxy.onModified((p: any) => {
               animate(p);
             });
           } else if (action === 'unregister') {
