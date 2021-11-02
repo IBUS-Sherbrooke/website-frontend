@@ -1,3 +1,24 @@
 .controller {
     padding: 8px;
+    width: 250px;
+    display: flex;
+    justify-content: stretch;
+    flex-direction: column;
+}
+
+.fileListContainer {
+    width: 100%;
+}
+
+.fileList {
+    width: 100%;
+    padding-top: 0;
+    margin-top: 16px;
+}
+
+.fileText {
+    color: #005ae093;
+    font-size: large;
+    font-weight: normal;
+    font-family: 'Times New Roman', Times, serif;
 }
