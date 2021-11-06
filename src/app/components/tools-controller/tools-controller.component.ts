@@ -29,6 +29,10 @@ export class ToolsControllerComponent implements OnInit {
     this.vtkManagerService.flipViewsProxy();
   }
 
+  setCropping(axis, bound, value): void {
+    this.vtkManagerService.setCropping(axis, bound, value);
+  }
+
   setWindowLevel(percent): void {
     if (this.canUpdate) {
       this.vtkManagerService.setWindowLevel(1 - percent);

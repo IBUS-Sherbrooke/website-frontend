@@ -70,11 +70,12 @@ export class TridimensionalVisualisationComponent implements OnInit {
         actor.getProperty().setSpecular(0.3);
         actor.getProperty().setSpecularPower(8.0);
       }
+      this.vtkManagerService.update3D();
       this.viewProxy.render();
     });
   }
 
-  initializeView() {
+  initializeView(): void {
     this.viewProxy = this.vtkManagerService.proxyManager.createProxy('Views', 'View3D');
     this.viewProxy.setContainer(this.tridimensionalDiv.nativeElement);
     this.viewProxy.getCornerAnnotation().updateTemplates({
