@@ -17,12 +17,12 @@ import { Observable, Subject } from 'rxjs';
 })
 export class VtkManagerService {
 
-  nextScale: number = -1;
+  nextScale = -1;
   proxyManager: any;
   proxySource: any;
   piecewiseFunctionProxy: any;
-  lastWindowLevel: Number;
-  lastWindowWidth: Number;
+  lastWindowLevel: number;
+  lastWindowWidth: number;
   window = new Subject<any>();
   dataSubject = new Subject<any>();
   extent: any;
@@ -189,7 +189,7 @@ export class VtkManagerService {
         return false;
       }
 
-      if (this.lastWindowLevel && this.lastWindowLevel === p.getWindowLevel() && 
+      if (this.lastWindowLevel && this.lastWindowLevel === p.getWindowLevel() &&
           this.lastWindowWidth && this.lastWindowWidth === p.getWindowWidth()) {
         return false;
       }
