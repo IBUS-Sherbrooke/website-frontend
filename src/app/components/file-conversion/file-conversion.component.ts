@@ -31,6 +31,7 @@ export class FileConversionComponent implements OnInit {
   send_file(){
   //This function converts the currently loaded VTK image into the stl format and 
     this.vtk_data_blob=vtk_image_to_STL(this.img_data)
+    console.log(this.vtk_data_blob)
     this.post_file()
   }
 

@@ -18,25 +18,13 @@ export class PostDataService {
     const endpoint = 'http://localhost:2000/api/printRequests';
     const formData: FormData = new FormData();
     console.log("posting")
-    formData.append('print_data', fileToUpload);
     formData.append('name', name);
     formData.append('user_id', user_id);
     formData.append('project_name', project_name);
+    formData.append('print_data', fileToUpload);
     return this.postdata(endpoint,formData)
 }
 
-getSegmentation(fileToUpload: Blob,name='Impression_name',user_id='1',project_name='project1' ): Observable<any> {
-  //Post function for files
-  const endpoint = 'http://localhost:2000/api/segmentation';
-  const formData: FormData = new FormData();
-  
-  formData.append('print_data', fileToUpload);
-  formData.append('name', name);
-  formData.append('user_id', user_id);
-  formData.append('project_name', project_name);
-  console.log("formData")
-  return this.getdata(endpoint,formData)
-}
 
 postdata(endpoint,data): Observable<any> {
   //General post function, for any data and enpoint
@@ -47,6 +35,6 @@ postdata(endpoint,data): Observable<any> {
 getdata(endpoint,data): Observable<any> {
   //General post function, for any data and enpoint
   return this.httpClient
-    .get(endpoint, data) 
+  .post(endpoint, data, {responseType: 'blob'})
 }
 }

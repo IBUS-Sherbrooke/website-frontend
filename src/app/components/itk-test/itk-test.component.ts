@@ -26,7 +26,22 @@ export class ItkTestComponent implements OnInit {
   }
 
   handleFileInput(files: FileList) {
-    this.fileToUpload = files;
-    this.visualisationDataService.load(this.fileToUpload);
+    console.log("Sending files to visualisation")
+    console.log(files.length)
+    var singlefile
+    if (files.length==1){
+      this.fileToUpload = files.item(0)
+      singlefile=true
+    }
+    else{
+      this.fileToUpload = files
+      singlefile=false
+    }
+    console.log(this.fileToUpload)
+    console.log(typeof this.fileToUpload)
+    
+    this.visualisationDataService.savefile(this.fileToUpload);
+    this.visualisationDataService.load(this.fileToUpload,singlefile);
   }
+
 }
