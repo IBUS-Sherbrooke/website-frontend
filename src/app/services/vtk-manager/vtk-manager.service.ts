@@ -17,9 +17,13 @@ import { Observable, Subject } from 'rxjs';
 })
 export class VtkManagerService {
 
-  proxyManager;
-  proxySource;
-  piecewiseFunctionProxy;
+  nextScale: number = -1;
+  proxyManager: any;
+  proxySource: any;
+  piecewiseFunctionProxy: any;
+  lastWindowLevel: Number;
+  lastWindowWidth: Number;
+  window = new Subject<any>();
   dataSubject = new Subject<any>();
   constructor(private visualisationDataService: VisualisationDataService) {
     const proxyConfiguration = {
@@ -27,18 +31,22 @@ export class VtkManagerService {
         Proxy: {
           LookupTable: {
             class: vtkLookupTableProxy,
-            options: [
-              [-1000, 0.3, 0.3, 1],
-              [-488, 0.3, 1, 0.3],
-              [463.28, 1, 0, 0],
-              [659.15, 1, 0.912535, 0.0374849],
-              [953, 1, 0.3, 0.3],
-            ],
+            options: {
+              mode: 1,
+              rgbPoints: [
+                [-1000, 0.3, 0.3, 1],
+                [-488, 0.3, 1, 0.3],
+                [463.28, 1, 0, 0],
+                [659.15, 1, 0.912535, 0.0374849],
+                [953, 1, 0.3, 0.3],
+              ],
+            },
           },
           PiecewiseFunction: {
             class: vtkPiecewiseFunctionProxy,
             options: {
-              Points: [
+              mode: 1,
+              points: [
                 [-1000, 0],
                 [152.19, 0],
                 [278.93, 0.190476],
@@ -53,35 +61,65 @@ export class VtkManagerService {
         Representations: {
           CoronalSlice : {
             class: vtkSliceRepresentationProxy,
-            options: {/*
-              link: 'CoronalSlice',
-              property: 'visibility',
-              updateOnBind: true,
-              type: 'application',*/
+            options: {
+              links: [
+                {
+                  link: 'CoronalSlice',
+                  property: 'windowLevel',
+                  updateOnBind: true,
+                },
+                {
+                  link: 'CoronalSlice',
+                  property: 'windowWidth',
+                  updateOnBind: true,
+                }
+              ],
+              ui: [],
+              definitionOptions: {},
             },
           },
           SagittalSlice : {
             class: vtkSliceRepresentationProxy,
-            options: {/*
-              link: 'SagittalSlice',
-              property: 'visibility',
-              updateOnBind: true,
-              type: 'application',*/
+            options: {
+              links: [
+                {
+                  link: 'SagittalSlice',
+                  property: 'windowLevel',
+                  updateOnBind: true,
+                },
+                {
+                  link: 'SagittalSlice',
+                  property: 'windowWidth',
+                  updateOnBind: true,
+                }
+              ],
+              ui: [],
+              definitionOptions: {},
             },
           },
           TransverseSlice : {
             class: vtkSliceRepresentationProxy,
-            options: {/*
-              link: 'TransverseSlice',
-              property: 'visibility',
-              updateOnBind: true,
-              type: 'application',*/
+            options: {
+              links: [
+                {
+                  link: 'TransverseSlice',
+                  property: 'windowLevel',
+                  updateOnBind: true,
+                },
+                {
+                  link: 'TransverseSlice',
+                  property: 'windowWidth',
+                  updateOnBind: true,
+                }
+              ],
+              ui: [],
+              definitionOptions: {},
             },
           },
           Volume: {
             class: vtkVolumeRepresentationProxy,
             options: {
-              edgeGradient: 0.2,
+              sampleDistance: 1,
             }
           }
         },
@@ -92,6 +130,7 @@ export class VtkManagerService {
               axis: 1,
               viewUp: [0, 1, 0],
               orientation: -1,
+              useParallelRendering: true,
               // sliceRepresentationSubscriptions: ['SagittalSlice', 'TransverseSlice'],
             }
           },
@@ -101,6 +140,7 @@ export class VtkManagerService {
               axis: 0,
               viewUp: [0, 0, 1],
               orientation: -1,
+              useParallelRendering: true,
               // sliceRepresentationSubscriptions: ['CoronalSlice', 'TransverseSlice'],
             }
           },
@@ -109,14 +149,17 @@ export class VtkManagerService {
             options: {
               axis: 2,
               viewUp: [0, 1, 0],
-              orientation: -1,
+              orientation: 1,
+              useParallelRendering: true,
               // sliceRepresentationSubscriptions: ['CoronalSlice', 'SagittalSlice'],
             }
           },
           View3D: {
             class: vtkViewProxy,
             options: {
-
+              axis: 1,
+              viewUp: [0, 1, 0],
+              orientation: -1,
             }
           }
         }
@@ -139,14 +182,114 @@ export class VtkManagerService {
     this.proxyManager = vtkProxyManager.newInstance({proxyConfiguration});
     this.proxySource = this.proxyManager.createProxy('Sources', 'DataProducer');
 
+
+    const animate = (p: any) => {
+      if (!p || p.getWindowLevel === undefined || p.getWindowWidth === undefined){
+        return false;
+      }
+
+      if (this.lastWindowLevel && this.lastWindowLevel === p.getWindowLevel() && this.lastWindowWidth && this.lastWindowWidth === p.getWindowWidth()) {
+        return false;
+      }
+
+      this.lastWindowLevel = p.getWindowLevel();
+      this.lastWindowWidth = p.getWindowWidth();
+
+      this.proxyManager.getRepresentations().forEach((rep: any) => {
+          rep.setWindowLevel(p.getWindowLevel());
+          rep.setWindowWidth(p.getWindowWidth());
+      });
+
+      this.proxyManager.autoAnimateViews();
+      this.window.next(p);
+
+      return true;
+    };
+
     const dataTest = this.visualisationDataService.getData().subscribe(imageData => {
       this.proxySource.setInputData(imageData);
       this.dataSubject.next(this.proxySource);
+
+      const groups = this.proxyManager.getProxyGroups();
+      let proxies = [];
+
+      for (let i = 0; i < groups.length; i += 1) {
+        const name = groups[i];
+
+        proxies = proxies.concat(
+            this.proxyManager.getProxyInGroup(name)
+          );
+      }
+
+      const pxmSubs = [];
+      const proxySubs = {};
+
+      pxmSubs.push(
+        this.proxyManager.onProxyRegistrationChange((info: any) => {
+          const { action, proxyId, proxy } = info;
+          if (action === 'register') {
+            proxySubs[proxyId] = proxy.onModified((p: any) => {
+              animate(p);
+            });
+          } else if (action === 'unregister') {
+            if (proxyId in proxySubs) {
+              proxySubs[proxyId].unsubscribe();
+              delete proxySubs[proxyId];
+            }
+          }
+        })
+      );
     });
+  }
+
+  flipViewsProxy(): any {
+    const views = this.proxyManager.getViews();
+    let representation: any;
+    let axis: any;
+    let volume: any;
+    let wasFlipMade = true;
+
+    views.forEach(view => {
+      representation = view.getRepresentations()[0];
+      
+      if (representation !== undefined && !representation.getVolumes().length) {
+        axis = view.getAxis();
+        representation.getActors()[0].setScale(axis ? this.nextScale : 1, axis ? 1 : this.nextScale, 1);
+      }
+      else if (representation !== undefined) {
+        volume = representation.getVolumes()[0].setScale(this.nextScale, 1, 1);
+      } else {
+        wasFlipMade = false;
+      }
+    });
+
+    if (wasFlipMade) {
+      this.nextScale = -1 * this.nextScale;
+      this.proxyManager.autoAnimateViews();
+    }
+  }
+  
+  setWindowLevel(percent): void {
+    const rep = this.proxyManager.getRepresentations()[0];
+    if (rep) {
+      const domain = rep.getPropertyDomainByName('windowLevel');
+      rep.setWindowLevel((percent * (domain.max - domain.min)) + domain.min);
+    }
+  }
+
+  setWindowWidth(percent): void {
+    const rep = this.proxyManager.getRepresentations()[0];
+    if (rep) {
+      const domain = rep.getPropertyDomainByName('windowWidth');
+      rep.setWindowWidth((percent * (domain.max - domain.min)) + domain.min);
+    }
   }
 
   getSource(): any {
     return this.dataSubject.asObservable();
   }
 
+  getWindow(): any {
+    return this.window.asObservable();
+  }
 }
