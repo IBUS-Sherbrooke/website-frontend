@@ -32,7 +32,7 @@ import { FileConversionComponent } from '../components/file-conversion/file-conv
   imports: [
     BrowserModule,
     AppRoutingModule,
-    HttpClientModule, 
+    HttpClientModule,
     AppRoutingModule
   ],
   providers: [],
