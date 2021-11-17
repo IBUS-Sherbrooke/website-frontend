@@ -1,8 +1,76 @@
 .controller {
     padding: 8px;
+    width: 250px;
+    display: flex;
+    flex-direction: column;
+    justify-content: stretch;
 }
 
 .slidercontainer {
     width: 100%;
     display: block;
+}
+
+.separatorContainer {
+    width: 100%;
+    margin-bottom: 12px;
+}
+
+.separator {
+    width: 100%;
+    padding-top: 0;
+    margin-top: 8px;
+}
+
+.separatorText {
+    color: #005ae093;
+    font-size: large;
+    font-weight: normal;
+    font-family: 'Times New Roman', Times, serif;
+}
+
+.separatorContainerNoPad {
+    width: 100%;
+}
+
+.flipButton {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    margin-top: 16px;
+    text-align: left;
+}
+
+.sliderText {
+    display: flex;
+    justify-content: flex-start;
+    padding-left: 12px;
+    color: #636363;
+    margin-top: 16px;
+    font-family: 'Times New Roman', Times, serif;
+    font-size: large;
+}
+
+.sliders {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+.slidersBound {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    padding-left: 12px;
+    padding-right: 12px;
+}
+
+.slidersInput {
+    width: 85%;
+    color: #673ab7;
+}
+
+.sliderBound {
+    display: flex;
+    justify-content: center;
+    min-width: 100px;
 }

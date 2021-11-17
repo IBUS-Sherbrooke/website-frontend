@@ -1,0 +1,19 @@
+.dialogText {
+    font-size: x-large;
+    font-weight: 400;
+    font-family: 'Times New Roman', Times, serif;
+    color: #0c92ff;
+    margin-bottom: 15px;
+}
+
+.dialogContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.spinnerContainer {
+    display: flex;
+    justify-content: center;
+    transform: scale(0.65);
+}

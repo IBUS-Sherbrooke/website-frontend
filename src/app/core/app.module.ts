@@ -1,6 +1,11 @@
 import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
+import { MatButtonModule } from '@angular/material/button';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
@@ -15,6 +20,12 @@ import { DatasetControllerComponent } from '../components/dataset-controller/dat
 import { ToolsControllerComponent } from '../components/tools-controller/tools-controller.component';
 import { FileConversionComponent } from '../components/file-conversion/file-conversion.component';
 import { FileSegmentationComponent } from '../components/file-segmentation/file-segmentation.component';
+import { LoadingModuleComponent } from '../components/loading-module/loading-module.component';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatListModule } from '@angular/material/list';
+import { MatSliderModule } from '@angular/material/slider';
+import { FormsModule } from '@angular/forms';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -28,15 +39,26 @@ import { FileSegmentationComponent } from '../components/file-segmentation/file-
     DatasetControllerComponent,
     ToolsControllerComponent,
     FileConversionComponent,
-    FileSegmentationComponent
+    FileSegmentationComponent,
+    LoadingModuleComponent,
+
   ],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
     AppRoutingModule,
-    HttpClientModule,
-    AppRoutingModule
+    HttpClientModule, 
+    AppRoutingModule,
+    MatButtonModule,
+    MatSnackBarModule,
+    MatDialogModule,
+    MatProgressSpinnerModule,
+    MatDividerModule,
+    MatListModule,
+    MatSliderModule,
+    FormsModule,
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
 export class AppModule { }

@@ -1,7 +1,11 @@
 
 <div class="controller">
-    <app-sample-get-request></app-sample-get-request>
-    <app-itk-test></app-itk-test>
-    <app-file-conversion></app-file-conversion>
-    <app-file-segmentation></app-file-segmentation>
+    <div class="fileListContainer">
+        <mat-list class="fileList">
+            <mat-list-item class="fileText">File options</mat-list-item>        
+            <mat-divider></mat-divider>
+        </mat-list>
+    </div>
+    <app-itk-test style="width: 100%;"></app-itk-test>
+    <app-file-conversion style="width: 100%;"></app-file-conversion>
 </div>

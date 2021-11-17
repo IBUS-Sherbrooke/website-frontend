@@ -25,6 +25,7 @@ export class VtkManagerService {
   lastWindowWidth: number;
   window = new Subject<any>();
   dataSubject = new Subject<any>();
+  extent: any;
   constructor(private visualisationDataService: VisualisationDataService) {
     const proxyConfiguration = {
       definitions: {
@@ -188,7 +189,8 @@ export class VtkManagerService {
         return false;
       }
 
-      if (this.lastWindowLevel && this.lastWindowLevel === p.getWindowLevel() && this.lastWindowWidth && this.lastWindowWidth === p.getWindowWidth()) {
+      if (this.lastWindowLevel && this.lastWindowLevel === p.getWindowLevel() &&
+          this.lastWindowWidth && this.lastWindowWidth === p.getWindowWidth()) {
         return false;
       }
 
@@ -213,12 +215,12 @@ export class VtkManagerService {
       const groups = this.proxyManager.getProxyGroups();
       let proxies = [];
 
-      for (let i = 0; i < groups.length; i += 1) {
-        const name = groups[i];
-
-        proxies = proxies.concat(
-            this.proxyManager.getProxyInGroup(name)
-          );
+      for (const name in groups) {
+        if (groups.hasOwnProperty(name)) {
+          proxies = proxies.concat(
+              this.proxyManager.getProxyInGroup(name)
+            );
+        }
       }
 
       const pxmSubs = [];
@@ -239,6 +241,16 @@ export class VtkManagerService {
           }
         })
       );
+    });
+  }
+
+  update3D(): void {
+    this.proxyManager.getRepresentations().forEach(a => {
+      if (a.getProxyName() === 'Volume') {
+        const cropFilter = a.getCropFilter();
+        this.extent = a.getCropFilter().getOutputData().getExtent();
+        cropFilter.setCroppingPlanes(...this.extent);
+      }
     });
   }
 
@@ -283,6 +295,18 @@ export class VtkManagerService {
       const domain = rep.getPropertyDomainByName('windowWidth');
       rep.setWindowWidth((percent * (domain.max - domain.min)) + domain.min);
     }
+  }
+
+  setCropping(axis, bound, value): void {
+    this.proxyManager.getRepresentations().forEach(a => {
+      if (a.getProxyName() === 'Volume') {
+        const cropFilter = a.getCropFilter();
+        const planes = cropFilter.getCroppingPlanes().slice();
+        planes[axis * 2 + bound] = Number((value * (this.extent[axis * 2 + 1] - this.extent[axis * 2])) + this.extent[axis * 2]);
+        cropFilter.setCroppingPlanes(...planes);
+      }
+    });
+    this.proxyManager.autoAnimateViews();
   }
 
   getSource(): any {

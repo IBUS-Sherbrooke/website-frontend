@@ -1,5 +1,8 @@
-<label>ITK Test</label>
-<input type="file"
-id="file"
-(change)="handleFileInput($event.target.files)" multiple>
+<input style="display: none;" type="file"
+    id="file"
+    (change)="handleFileInput($event.target.files)" multiple #hiddenfileinput>
+
+<button class="wideImportButton" (click)="hiddenfileinput.click()" mat-button color="primary">
+    Import DICOM files
+</button>
 

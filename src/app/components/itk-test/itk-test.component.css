@@ -1,0 +1,8 @@
+.wideImportButton {
+    width: 100%;
+    display: flex;
+    justify-content: stretch;
+    margin-top: 16px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}

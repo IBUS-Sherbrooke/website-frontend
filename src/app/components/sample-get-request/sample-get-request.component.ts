@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-sample-get-request',
@@ -7,21 +8,19 @@ import { HttpClient } from '@angular/common/http';
   styleUrls: ['./sample-get-request.component.css']
 })
 export class SampleGetRequestComponent implements OnInit {
-  get_string = 'Le serveur n\'est pas en train de rouler';
-  errorMessage: string;
-  constructor(private http: HttpClient) { }
+  snackBarNoServer: string = "Server is not currently running";
+  confirmMessage: string = "Close"
+  constructor(private http: HttpClient, private statusSnackBar: MatSnackBar) { }
 
   ngOnInit(): void {
     this.http.get('http://localhost:2000/api/printRequests/mock', {responseType: 'text'}).subscribe({
       next: data => {
-          this.get_string = data;
-          console.log(this.get_string);
+          console.log(data);
       },
       error: error => {
-          this.errorMessage = error.message;
-          console.error('There was an error!', error);
+          this.statusSnackBar.open(this.snackBarNoServer, this.confirmMessage);
+          console.log('Could not reach server: ', error);
       }
   });
   }
-
 }

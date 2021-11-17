@@ -4,15 +4,18 @@ import { Subject, Observable } from 'rxjs';
 import readImageDICOMFileSeries from 'itk/readImageDICOMFileSeries';
 import ITKHelper from 'vtk.js/Sources/Common/DataModel/ITKHelper';
 import readImageFile from 'itk/readImageFile';
+import { MatDialog } from '@angular/material/dialog';
+import { LoadingModuleComponent } from 'src/app/components/loading-module/loading-module.component';
 @Injectable({
   providedIn: 'root'
 })
 export class VisualisationDataService {
   dicomFileSerie = new Subject<any>();
+  dialogRef = null;
+  constructor(public dialog: MatDialog) { }
   fileToUpload = null;
   visualisationData = new Subject<any>();
   data2 = new Subject<any>();
-  constructor() { }
   savefile(files): void {
     console.log('Saving original file');
     this.dicomFileSerie.next(files);
@@ -23,6 +26,11 @@ export class VisualisationDataService {
       const data = ITKHelper.convertItkToVtkImage(image.image);
       this.visualisationData.next(data);
       this.data2.next(data);
+    })
+    .then(() => {
+      if (this.dialogRef !== null) {
+        this.dialogRef.close();
+      }
     });
     }
     else {
@@ -42,5 +50,13 @@ export class VisualisationDataService {
 
   getRawData(): Observable<any> {
     return this.data2.asObservable();
+  }
+
+  openLoadingDialog(): void {
+    const dialogRef = this.dialog.open(LoadingModuleComponent, {
+      width: '300px'
+    });
+
+    this.dialogRef = dialogRef;
   }
 }
