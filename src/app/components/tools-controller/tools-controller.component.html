@@ -1,11 +1,18 @@
 <div class="controller">
-    <button class="flipButton" mat-button color="primary"  (click)="flipViews()">Flip views</button>
+    <div class="separatorContainer">
+        <mat-list class="separator">
+            <mat-list-item class="separatorText">Window options</mat-list-item>        
+            <mat-divider></mat-divider>
+        </mat-list>
+    </div>
     <div class="slidercontainer">
         <div class="sliderText">
             Window luminosity
         </div>
         <div class="sliders">
-            <input id="windowLevel" type="range" min="0" max="1" step="0.001" value="0.5" (input)="setWindowLevel($event.target.value)"/>
+            <mat-slider class="slidersInput" id="windowLevel" min="0" color="primary"
+                max="1" step="0.001" [(ngModel)]="levelValue"
+                (input)="setWindowLevel($event)"></mat-slider>
         </div>
     </div>
     <div class="slidercontainer">
@@ -13,7 +20,16 @@
             Window opacity
         </div>
         <div class="sliders">
-            <input class="sliders" id="windowWidth" type="range" min="0" max="1" step="0.001" value="0.5" (input)="setWindowWidth($event.target.value)"/>
+            <mat-slider class="slidersInput" id="windowWidth" min="0" color="primary"
+                max="1" step="0.001" [(ngModel)]="widthValue"
+                (input)="setWindowWidth($event)"></mat-slider>
         </div>
     </div>
+    <div class="separatorContainerBottom">
+        <mat-list class="separator">
+            <mat-list-item class="separatorText">Other tools</mat-list-item>
+            <mat-divider></mat-divider>
+        </mat-list>
+    </div>
+    <button class="flipButton" mat-button color="primary"  (click)="flipViews()">Flip views</button>
 </div>

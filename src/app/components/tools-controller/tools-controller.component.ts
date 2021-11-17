@@ -9,6 +9,8 @@ import { VtkManagerService } from '../../services/vtk-manager/vtk-manager.servic
 })
 export class ToolsControllerComponent implements OnInit {
   canUpdate = true;
+  widthValue: number = 0.5;
+  levelValue: number = 0.5;
   @ViewChild('windowLevel') windowLevel;
   @ViewChild('windowWidth') windowWidth;
   constructor(private vtkManagerService: VtkManagerService) { }
@@ -18,9 +20,9 @@ export class ToolsControllerComponent implements OnInit {
       const levelDomain = p.getPropertyDomainByName('windowLevel');
       const widthDomain = p.getPropertyDomainByName('windowWidth');
       this.canUpdate = false;
-      (document.getElementById('windowLevel') as any).value = 1 - (p.getWindowLevel() - levelDomain.min) /
+      this.levelValue = 1 - (p.getWindowLevel() - levelDomain.min) /
         (levelDomain.max - levelDomain.min);
-      (document.getElementById('windowWidth') as any).value = (p.getWindowWidth() - widthDomain.min) / (widthDomain.max - widthDomain.min);
+      this.widthValue = (p.getWindowWidth() - widthDomain.min) / (widthDomain.max - widthDomain.min);
       this.canUpdate = true;
     });
   }
@@ -29,15 +31,16 @@ export class ToolsControllerComponent implements OnInit {
     this.vtkManagerService.flipViewsProxy();
   }
 
-  setWindowLevel(percent): void {
+
+  setWindowLevel(event: any): void {
     if (this.canUpdate) {
-      this.vtkManagerService.setWindowLevel(1 - percent);
+      this.vtkManagerService.setWindowLevel(1 - event.value);
     }
   }
   
-  setWindowWidth(percent): void {
+  setWindowWidth(event: any): void {
     if (this.canUpdate) {
-      this.vtkManagerService.setWindowWidth(percent);
+      this.vtkManagerService.setWindowWidth(event.value);
     }
   }
 }

@@ -22,6 +22,8 @@ import { FileConversionComponent } from '../components/file-conversion/file-conv
 import { LoadingModuleComponent } from '../components/loading-module/loading-module.component';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatListModule } from '@angular/material/list';
+import { MatSliderModule } from '@angular/material/slider';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -50,6 +52,8 @@ import { MatListModule } from '@angular/material/list';
     MatProgressSpinnerModule,
     MatDividerModule,
     MatListModule,
+    MatSliderModule,
+    FormsModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
