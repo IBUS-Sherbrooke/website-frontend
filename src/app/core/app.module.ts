@@ -1,6 +1,11 @@
 import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
+import { MatButtonModule } from '@angular/material/button';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
@@ -14,6 +19,11 @@ import { GeneralControllerComponent } from '../components/general-controller/gen
 import { DatasetControllerComponent } from '../components/dataset-controller/dataset-controller.component';
 import { ToolsControllerComponent } from '../components/tools-controller/tools-controller.component';
 import { FileConversionComponent } from '../components/file-conversion/file-conversion.component';
+import { LoadingModuleComponent } from '../components/loading-module/loading-module.component';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatListModule } from '@angular/material/list';
+import { MatSliderModule } from '@angular/material/slider';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -27,15 +37,25 @@ import { FileConversionComponent } from '../components/file-conversion/file-conv
     GeneralControllerComponent,
     DatasetControllerComponent,
     ToolsControllerComponent,
-    FileConversionComponent
+    FileConversionComponent,
+    LoadingModuleComponent,
   ],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
     AppRoutingModule,
-    HttpClientModule,
-    AppRoutingModule
+    HttpClientModule, 
+    AppRoutingModule,
+    MatButtonModule,
+    MatSnackBarModule,
+    MatDialogModule,
+    MatProgressSpinnerModule,
+    MatDividerModule,
+    MatListModule,
+    MatSliderModule,
+    FormsModule,
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
 export class AppModule { }

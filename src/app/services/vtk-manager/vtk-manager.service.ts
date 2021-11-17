@@ -304,9 +304,9 @@ export class VtkManagerService {
         const planes = cropFilter.getCroppingPlanes().slice();
         planes[axis * 2 + bound] = Number((value * (this.extent[axis * 2 + 1] - this.extent[axis * 2])) + this.extent[axis * 2]);
         cropFilter.setCroppingPlanes(...planes);
-        console.log(planes);
       }
     });
+    this.proxyManager.autoAnimateViews();
   }
 
   getSource(): any {

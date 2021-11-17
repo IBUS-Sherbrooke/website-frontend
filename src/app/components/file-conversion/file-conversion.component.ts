@@ -30,15 +30,23 @@ export class FileConversionComponent implements OnInit {
   
   send_file(){
   //This function converts the currently loaded VTK image into the stl format and 
+    if (!this.img_data) {
+      return;
+    }
+    
     this.vtk_data_blob=vtk_image_to_STL(this.img_data)
     this.post_file()
   }
 
-  download_file(){
+  download_file() {
     //This function converts the currently loaded VTK image into the stl format and 
-      this.vtk_data_blob=vtk_image_to_STL(this.img_data)
-      saveAs(this.vtk_data_blob, "my_file.stl")
+    if (!this.img_data) {
+      return;
     }
+
+    this.vtk_data_blob=vtk_image_to_STL(this.img_data)
+    saveAs(this.vtk_data_blob, "my_file.stl")
+  }
 
   post_file() {
     this.Post_data_service.postFile(this.vtk_data_blob).subscribe(data => 
