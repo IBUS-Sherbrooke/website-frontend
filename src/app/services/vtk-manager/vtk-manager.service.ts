@@ -17,12 +17,12 @@ import { Observable, Subject } from 'rxjs';
 })
 export class VtkManagerService {
 
-  nextScale: number = -1;
+  nextScale = -1;
   proxyManager: any;
   proxySource: any;
   piecewiseFunctionProxy: any;
-  lastWindowLevel: Number;
-  lastWindowWidth: Number;
+  lastWindowLevel: number;
+  lastWindowWidth: number;
   window = new Subject<any>();
   dataSubject = new Subject<any>();
   constructor(private visualisationDataService: VisualisationDataService) {
@@ -251,7 +251,7 @@ export class VtkManagerService {
 
     views.forEach(view => {
       representation = view.getRepresentations()[0];
-      
+
       if (representation !== undefined && !representation.getVolumes().length) {
         axis = view.getAxis();
         representation.getActors()[0].setScale(axis ? this.nextScale : 1, axis ? 1 : this.nextScale, 1);
@@ -268,7 +268,7 @@ export class VtkManagerService {
       this.proxyManager.autoAnimateViews();
     }
   }
-  
+
   setWindowLevel(percent): void {
     const rep = this.proxyManager.getRepresentations()[0];
     if (rep) {

@@ -33,7 +33,7 @@ import { FileSegmentationComponent } from '../components/file-segmentation/file-
   imports: [
     BrowserModule,
     AppRoutingModule,
-    HttpClientModule, 
+    HttpClientModule,
     AppRoutingModule
   ],
   providers: [],

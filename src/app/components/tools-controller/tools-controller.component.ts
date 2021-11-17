@@ -34,7 +34,7 @@ export class ToolsControllerComponent implements OnInit {
       this.vtkManagerService.setWindowLevel(1 - percent);
     }
   }
-  
+
   setWindowWidth(percent): void {
     if (this.canUpdate) {
       this.vtkManagerService.setWindowWidth(percent);
