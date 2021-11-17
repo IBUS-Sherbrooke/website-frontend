@@ -32,4 +32,23 @@
         </mat-list>
     </div>
     <button class="flipButton" mat-button color="primary"  (click)="flipViews()">Flip views</button>
+
+    <div>
+        <p>Cropping</p>
+        <div class="slidercontainer">
+            <p>X bounds:</p>
+            <input class="sliderBound" id="xLowerBound" type="range" min="0" max="1" step="0.001" value="0" (change)="setCropping(0, 0, $event.target.value)"/>
+            <input class="sliderBound" id="xUpperBound" type="range" min="0" max="1" step="0.001" value="1" (change)="setCropping(0, 1, $event.target.value)"/>
+        </div>
+        <div class="slidercontainer">
+            <p>Y bounds:</p>
+            <input class="sliderBound" id="yLowerBound" type="range" min="0" max="1" step="0.001" value="0" (change)="setCropping(1, 0, $event.target.value)"/>
+            <input class="sliderBound" id="yUpperBound" type="range" min="0" max="1" step="0.001" value="1" (change)="setCropping(1, 1, $event.target.value)"/>
+        </div>
+        <div class="slidercontainer">
+            <p>Z bounds:</p>
+            <input class="sliderBound" id="zLowerBound" type="range" min="0" max="1" step="0.001" value="0" (change)="setCropping(2, 0, $event.target.value)"/>
+            <input class="sliderBound" id="zUpperBound" type="range" min="0" max="1" step="0.001" value="1" (change)="setCropping(2, 1, $event.target.value)"/>
+        </div>
+    </div>
 </div>

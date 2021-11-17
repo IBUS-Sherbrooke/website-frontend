@@ -38,6 +38,10 @@ export class ToolsControllerComponent implements OnInit {
     }
   }
   
+  setCropping(axis, bound, value): void {
+    this.vtkManagerService.setCropping(axis, bound, value);
+  }
+  
   setWindowWidth(event: any): void {
     if (this.canUpdate) {
       this.vtkManagerService.setWindowWidth(event.value);
