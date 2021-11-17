@@ -11,6 +11,12 @@ export class ToolsControllerComponent implements OnInit {
   canUpdate = true;
   widthValue: number = 0.5;
   levelValue: number = 0.5;
+  xLowBound: number = 0;
+  xHighBound: number = 1;
+  yLowBound: number = 0;
+  yHighBound: number = 1;
+  zLowBound: number = 0;
+  zHighBound: number = 1;
   @ViewChild('windowLevel') windowLevel;
   @ViewChild('windowWidth') windowWidth;
   constructor(private vtkManagerService: VtkManagerService) { }

@@ -29,8 +29,7 @@
     font-family: 'Times New Roman', Times, serif;
 }
 
-.separatorContainerBottom {
-    margin-top: 18px;
+.separatorContainerNoPad {
     width: 100%;
 }
 
@@ -53,11 +52,17 @@
 
 .sliders {
     display: flex;
-    justify-content: flex-start;
+    justify-content: center;
     width: 100%;
-    padding-left: 12px;
 }
 
+.slidersBound {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    padding-left: 12px;
+    padding-right: 12px;
+}
 
 .slidersInput {
     width: 85%;
@@ -65,5 +70,7 @@
 }
 
 .sliderBound {
-    width: 50%;
+    display: flex;
+    justify-content: center;
+    min-width: 100px;
 }
