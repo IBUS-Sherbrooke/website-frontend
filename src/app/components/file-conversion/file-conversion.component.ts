@@ -21,7 +21,7 @@ export class FileConversionComponent implements OnInit {
     //get data on upload (this should be changed to update data whenever it is changed through segmentation or other inputs)
     this.subscription = this.visualisationDataService.getRawData()
     .subscribe(imageData => {
-      this.img_data=imageData
+      this.img_data=imageData;
     }),
     error => {
       console.log(error);
@@ -34,8 +34,8 @@ export class FileConversionComponent implements OnInit {
       return;
     }
     
-    this.vtk_data_blob=vtk_image_to_STL(this.img_data)
-    this.post_file()
+    this.vtk_data_blob=vtk_image_to_STL(this.img_data);
+    this.post_file();
   }
 
   download_file() {
@@ -44,8 +44,8 @@ export class FileConversionComponent implements OnInit {
       return;
     }
 
-    this.vtk_data_blob=vtk_image_to_STL(this.img_data)
-    saveAs(this.vtk_data_blob, "my_file.stl")
+    this.vtk_data_blob=vtk_image_to_STL(this.img_data);
+    saveAs(this.vtk_data_blob, "my_file.stl");
   }
 
   post_file() {
