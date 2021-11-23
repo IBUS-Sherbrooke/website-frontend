@@ -19,6 +19,7 @@ import { GeneralControllerComponent } from '../components/general-controller/gen
 import { DatasetControllerComponent } from '../components/dataset-controller/dataset-controller.component';
 import { ToolsControllerComponent } from '../components/tools-controller/tools-controller.component';
 import { FileConversionComponent } from '../components/file-conversion/file-conversion.component';
+import { FileSegmentationComponent } from '../components/file-segmentation/file-segmentation.component';
 import { LoadingModuleComponent } from '../components/loading-module/loading-module.component';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatListModule } from '@angular/material/list';
@@ -38,7 +39,9 @@ import { FormsModule } from '@angular/forms';
     DatasetControllerComponent,
     ToolsControllerComponent,
     FileConversionComponent,
+    FileSegmentationComponent,
     LoadingModuleComponent,
+
   ],
   imports: [
     BrowserModule,
