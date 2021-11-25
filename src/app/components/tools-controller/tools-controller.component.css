@@ -33,11 +33,21 @@
     width: 100%;
 }
 
-.flipButton {
+.toolButtons {
     padding-top: 10px;
     padding-bottom: 10px;
     margin-top: 16px;
     text-align: left;
+    outline: none;
+}
+
+.toolButtonsPick {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    margin-top: 16px;
+    text-align: left;
+    background-color: #683ab731;
+    outline: none;
 }
 
 .sliderText {
