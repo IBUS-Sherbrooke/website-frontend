@@ -54,7 +54,7 @@ export class ToolsControllerComponent implements OnInit {
       this.vtkManagerService.setWindowLevel(1 - event.value);
     }
   }
-  
+ 
   setCropping(axis, bound, value): void {
     this.vtkManagerService.setCropping(axis, bound, value);
   }

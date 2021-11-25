@@ -14,7 +14,7 @@ export class TransverseVisualisationComponent implements OnInit {
   // VTK attributes
   renderWindow: any;
   renderer: any;
-  camera: any
+  camera: any;
   interactor: any;
   actor: any;
   mapper: any;

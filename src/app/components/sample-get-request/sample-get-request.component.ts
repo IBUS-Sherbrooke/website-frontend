@@ -22,7 +22,5 @@ export class SampleGetRequestComponent implements OnInit {
           console.log('Could not reach server: ', error);
       }
   });
-
   }
-
 }
