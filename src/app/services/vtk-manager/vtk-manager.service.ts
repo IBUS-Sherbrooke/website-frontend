@@ -8,6 +8,15 @@ import vtkSliceRepresentationProxy from 'vtk.js/Sources/Proxy/Representations/Sl
 import vtkView2DProxy from 'vtk.js/Sources/Proxy/Core/View2DProxy';
 import vtkViewProxy from 'vtk.js/Sources/Proxy/Core/ViewProxy';
 import vtkVolumeRepresentationProxy from 'vtk.js/Sources/Proxy/Representations/VolumeRepresentationProxy';
+import vtkPointPicker from 'vtk.js/Sources/Rendering/Core/PointPicker'
+import vtkPlane from 'vtk.js/Sources/Common/DataModel/Plane';
+import vtkCircleSource from 'vtk.js/Sources/Filters/Sources/CircleSource';
+import vtkSphereSource from 'vtk.js/Sources/Filters/Sources/SphereSource';
+import vtkMapper from 'vtk.js/Sources/Rendering/Core/Mapper';
+import vtkActor from 'vtk.js/Sources/Rendering/Core/Actor';
+
+import { mat4, quat, vec3 } from 'gl-matrix';
+
 
 import { VisualisationDataService } from './../visualisation-Data/visualisation-data.service';
 import { Observable, Subject } from 'rxjs';
@@ -18,6 +27,8 @@ import { Observable, Subject } from 'rxjs';
 export class VtkManagerService {
 
   nextScale = -1;
+  isPickerInitialized = false;
+  isPickerEnabled: boolean = false;
   proxyManager: any;
   proxySource: any;
   piecewiseFunctionProxy: any;
@@ -279,6 +290,166 @@ export class VtkManagerService {
       this.nextScale = -1 * this.nextScale;
       this.proxyManager.autoAnimateViews();
     }
+  }
+
+
+  togglePicker(): void {
+    const reps = this.proxyManager.getRepresentations();
+
+    if (reps.length) {
+      this.isPickerEnabled = !this.isPickerEnabled;
+    }
+    else {
+      this.isPickerEnabled = false;
+    }
+
+
+    if (!this.isPickerInitialized) {
+      const wasSuccessful = this.initializePicker();
+
+      if (!wasSuccessful) {
+        this.isPickerEnabled = false;
+      }
+      else {
+        this.isPickerInitialized = true;
+      }
+    }
+  }
+
+  computePixelAt(plane, probeVec, imageData): any {
+    const intersection = vtkPlane.intersectWithLine(
+      probeVec.near,
+      probeVec.far,
+      plane.origin,
+      plane.normal
+    );
+    if (intersection.intersection) {
+      const point = intersection.x;
+      const [i, j, k] = imageData.worldToIndex(point).map((c) =>
+        // this is a hack to work around the first slice sometimes being
+        // very close to zero, but not quite, resulting in being unable to
+        // see pixel values for 0th slice.
+        Math.abs(c) < 1e-4 ? Math.round(c) : c
+      );
+      const extent = imageData.getExtent();
+      if (
+        i >= extent[0] &&
+        i <= extent[1] &&
+        j >= extent[2] &&
+        j <= extent[3] &&
+        k >= extent[4] &&
+        k <= extent[5]
+      ) {
+        const offsetIndex = imageData.computeOffsetIndex([i, j, k]);
+        const pixel = imageData.getPointData().getScalars().getTuple(offsetIndex);
+  
+        return {
+          location: [Math.round(i), Math.round(j), Math.round(k)],
+          value: pixel,
+          numberOfComponents: pixel.length,
+        };
+      }
+    }
+    return null;
+  }
+
+
+  indexToWorldRotation(imageData, vec): any {
+    const i2wMat = imageData.getIndexToWorld();
+    const rotation = quat.create();
+    mat4.getRotation(rotation, i2wMat);
+  
+    const out = vec3.create();
+    vec3.transformQuat(out, vec, rotation);
+    return out;
+  }
+
+
+  computeIntersectionPlane(rep, image): any {
+    let plane = {
+      normal: [0, 0, 1],
+      origin: [0, 0, 0],
+    };
+
+    if (image && rep?.getSlice && rep?.getSlicingMode) {
+      const mode = rep.getSlicingMode();
+      const slice = rep.getSlice();
+
+      const axis = 'XYZIJK'.indexOf(mode);
+      if (axis > -1) {
+        let origin = [0, 0, 0];
+        let normal = [0, 0, 0];
+        origin[axis % 3] = slice;
+        normal[axis % 3] = 1;
+
+        // transform from index to world if required
+        if (axis >= 3) {
+          origin = image.indexToWorld(origin);
+          normal = this.indexToWorldRotation(image, normal);
+        }
+
+        plane = { normal, origin };
+      }
+    }
+
+    return plane;
+  }
+
+  initializePicker(): boolean {
+    let foundRep = false;
+    const views = this.proxyManager.getViews();
+
+    views.forEach((view: any) => {
+      const renderer = view.getRenderer();
+
+      const rep = view.getRepresentations()[0];
+
+      if (rep && !rep.getVolumes().length) {
+        foundRep = true;
+        const image = rep.getMapper().getInputData();
+        const gl = view.getOpenglRenderWindow();
+        
+
+        
+        view.getInteractor().onLeftButtonPress((callData: any) => {
+          const pos = callData.position;
+          
+          if (gl) {
+            if (this.isPickerEnabled) {
+              const probeVec = {
+                near: gl.displayToWorld(pos.x, pos.y, 0, renderer),
+                far: gl.displayToWorld(pos.x, pos.y, 1, renderer),
+              };
+
+              const plane = this.computeIntersectionPlane(rep, image);
+
+              const pixelValue = this.computePixelAt(plane, probeVec, image)
+
+              if (pixelValue) {
+                // const circle = vtkSphereSource.newInstance();
+                // const picker = vtkPointPicker.newInstance();
+                // picker.pick([pos.x, pos.y, 0], renderer);
+                // const pickedPoint = picker.getPickPosition();
+                // circle.setCenter(pickedPoint);
+                // circle.setRadius(2);
+                // const circleMapper = vtkMapper.newInstance();
+                // circleMapper.setInputData(circle.getOutputData());
+                // const circleActor = vtkActor.newInstance();
+                // circleActor.setMapper(circleMapper);
+                // circleActor.getProperty().setColor(1.0, 0.0, 0.0);
+                // renderer.addActor(circleActor);
+                // this.proxyManager.autoAnimateViews();
+              }
+
+              console.log("Picked point: ", pixelValue);
+            }
+          }          
+        });
+      }
+      
+    });
+
+    return foundRep;
   }
 
   setWindowLevel(percent): void {

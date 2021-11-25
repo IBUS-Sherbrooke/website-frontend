@@ -1,6 +1,8 @@
 import { ViewChild, Component, OnInit } from '@angular/core';
 import { domain } from 'process';
 import { VtkManagerService } from '../../services/vtk-manager/vtk-manager.service';
+import vtkPointPicker from 'vtk.js/Sources/Rendering/Core/PointPicker'
+
 
 @Component({
   selector: 'app-tools-controller',
@@ -9,6 +11,7 @@ import { VtkManagerService } from '../../services/vtk-manager/vtk-manager.servic
 })
 export class ToolsControllerComponent implements OnInit {
   canUpdate = true;
+  isPickEnabled: boolean = false;
   widthValue: number = 0.5;
   levelValue: number = 0.5;
   xLowBound: number = 0;
@@ -35,6 +38,14 @@ export class ToolsControllerComponent implements OnInit {
 
   flipViews(): void {
     this.vtkManagerService.flipViewsProxy();
+  }
+
+
+  initSelectRegion(): void {
+    const picker = vtkPointPicker.newInstance();
+    this.vtkManagerService.togglePicker();
+    this.isPickEnabled = this.vtkManagerService.isPickerEnabled;
+    // console.log("picker: ", picker);
   }
 
 

@@ -70,11 +70,18 @@
             (change)="setCropping(2, 1, $event.value)"></mat-slider>
         </div>
     </div>
+    <div class="separatorContainer">
+        <mat-list class="separator">
+            <mat-list-item class="separatorText">Point picker</mat-list-item>
+            <mat-divider></mat-divider>
+        </mat-list>
+    </div>
+    <button [ngClass]="isPickEnabled ? 'toolButtonsPick' : 'toolButtons'" mat-button color="primary" (click)="initSelectRegion()">Select region</button>
     <div class="separatorContainerNoPad">
         <mat-list class="separator">
             <mat-list-item class="separatorText">Other tools</mat-list-item>
             <mat-divider></mat-divider>
         </mat-list>
     </div>
-    <button class="flipButton" mat-button color="primary"  (click)="flipViews()">Flip views</button>
+    <button class="toolButtons" mat-button color="primary"  (click)="flipViews()">Flip views</button>
 </div>
