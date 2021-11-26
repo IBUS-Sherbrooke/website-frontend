@@ -41,6 +41,7 @@ export class VtkManagerService {
   y_segment_coord :  number;
   z_segment_coord : number;
   imgData= new Subject<any>();
+  img_Data_Transformed=new Subject<any>();
   constructor(private visualisationDataService: VisualisationDataService) {
     const proxyConfiguration = {
       definitions: {
@@ -230,6 +231,7 @@ export class VtkManagerService {
     })
 
     const dataTest = this.visualisationDataService.getData().subscribe(imageData => {
+      this.img_Data_Transformed=imageData
       this.proxySource.setInputData(imageData);
       this.dataSubject.next(this.proxySource);
 
@@ -300,6 +302,7 @@ export class VtkManagerService {
       this.nextScale = -1 * this.nextScale;
       this.proxyManager.autoAnimateViews();
     }
+    
   }
 
 
@@ -436,19 +439,20 @@ export class VtkManagerService {
               const pixelValue = this.computePixelAt(plane, probeVec, image)
 
               if (pixelValue) {
-                // const circle = vtkSphereSource.newInstance();
-                // const picker = vtkPointPicker.newInstance();
-                // picker.pick([pos.x, pos.y, 0], renderer);
-                // const pickedPoint = picker.getPickPosition();
-                // circle.setCenter(pickedPoint);
-                // circle.setRadius(2);
-                // const circleMapper = vtkMapper.newInstance();
-                // circleMapper.setInputData(circle.getOutputData());
-                // const circleActor = vtkActor.newInstance();
-                // circleActor.setMapper(circleMapper);
-                // circleActor.getProperty().setColor(1.0, 0.0, 0.0);
-                // renderer.addActor(circleActor);
-                // this.proxyManager.autoAnimateViews();
+                 console.log(pos.y)
+                 const circle = vtkSphereSource.newInstance();
+                 const picker = vtkPointPicker.newInstance();
+                 picker.pick([pos.x, pos.y-15, 0], renderer);
+                 const pickedPoint = picker.getPickPosition();
+                 circle.setCenter(pickedPoint);
+                 circle.setRadius(2);
+                 const circleMapper = vtkMapper.newInstance();
+                circleMapper.setInputData(circle.getOutputData());
+                const circleActor = vtkActor.newInstance();
+                circleActor.setMapper(circleMapper);
+                circleActor.getProperty().setColor(1.0, 0.0, 0.0);
+                renderer.addActor(circleActor);
+                this.proxyManager.autoAnimateViews();
               }
               this.x_segment_coord=pixelValue.location[0]
               this.y_segment_coord=pixelValue.location[1]
@@ -514,6 +518,28 @@ export class VtkManagerService {
   }
   getFile(): any {
     return this.imgData;
+  }
+  
+  getData(): any {
+    // console.log("Proxy")
+    // console.log(this.proxySource)
+    // console.log("Proxy Mangaer")
+    // console.log(this.proxyManager)
+    // console.log("GetDataset")
+    // console.log(this.proxySource.getDataset())
+    // console.log("Type")
+    // console.log(typeof(this.proxySource.getDataset()))
+    // let val_data;
+    // this.proxyManager.getRepresentations().forEach((rep: any) => {
+    //   if (!rep.getVolumes().length) {
+    //     val_data=rep.getActors()[0].getImages()
+    //   }
+    // });
+    
+    // console.log("ValData")
+    // console.log(val_data)
+    return this.img_Data_Transformed
+    //return val_data
   }
 
 }
