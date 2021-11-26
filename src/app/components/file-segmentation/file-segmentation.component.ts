@@ -38,7 +38,6 @@ export class FileSegmentationComponent implements OnInit {
     this.post_file(this.imgData);
   }
   post_file(base64data): void{
-  console.log("aaa",this.imgData)
   var x= this.vtkManagerService.get_x_coord()
   var y= this.vtkManagerService.get_y_coord()
   var z= this.vtkManagerService.get_z_coord()
@@ -46,6 +45,10 @@ export class FileSegmentationComponent implements OnInit {
     .subscribe(data =>
       {
         saveAs(data, 'my_segmentation.nrrd');
+        const file = new File([data],'my_segmentation.nrrd');
+        this.visualisationDataService.savefile(file);
+        this.visualisationDataService.load(file, true);    
+        
         console.log(data); }
         , error => {
         console.log(error);
