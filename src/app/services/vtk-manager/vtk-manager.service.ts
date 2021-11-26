@@ -421,9 +421,7 @@ export class VtkManagerService {
         foundRep = true;
         const image = rep.getMapper().getInputData();
         const gl = view.getOpenglRenderWindow();
-        
 
-        
         view.getInteractor().onLeftButtonPress((callData: any) => {
           const pos = callData.position;
           
@@ -439,14 +437,13 @@ export class VtkManagerService {
               const pixelValue = this.computePixelAt(plane, probeVec, image)
 
               if (pixelValue) {
-                 console.log(pos.y)
-                 const circle = vtkSphereSource.newInstance();
-                 const picker = vtkPointPicker.newInstance();
-                 picker.pick([pos.x, pos.y, 0], renderer);
-                 const pickedPoint = picker.getPickPosition();
-                 circle.setCenter(pickedPoint);
-                 circle.setRadius(2);
-                 const circleMapper = vtkMapper.newInstance();
+                const circle = vtkSphereSource.newInstance();
+                const picker = vtkPointPicker.newInstance();
+                picker.pick([pos.x, pos.y, 0], renderer);
+                const pickedPoint = picker.getPickPosition();
+                circle.setCenter(pickedPoint);
+                circle.setRadius(2);
+                const circleMapper = vtkMapper.newInstance();
                 circleMapper.setInputData(circle.getOutputData());
                 const circleActor = vtkActor.newInstance();
                 circleActor.setMapper(circleMapper);
