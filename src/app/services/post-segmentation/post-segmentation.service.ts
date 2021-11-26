@@ -14,11 +14,16 @@ export class PostSegmentationService {
     return throwError(error.message || 'server Error');
   }
 
-getSegmentation(fileToUpload, name= 'Impression_name', userId= '1', projectName= 'project1'): Observable<Blob>{
+getSegmentation(fileToUpload,x,y,z, name= 'Impression_name', userId= '1', projectName= 'project1'): Observable<Blob>{
+  console.log("x",x," y:",y," z:",z)
   // Post function for files
+  console.log(fileToUpload)
   const endpoint = 'http://localhost:2000/api/segmentation';
   const formData: FormData = new FormData();
   // console.log(fileToUpload)
+  formData.append('x', x);
+  formData.append('y', y);
+  formData.append('z', z);
   formData.append('name', name);
   formData.append('print_data', fileToUpload);
   formData.append('user_id', userId);

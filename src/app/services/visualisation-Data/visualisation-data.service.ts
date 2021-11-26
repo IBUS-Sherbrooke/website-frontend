@@ -16,8 +16,10 @@ export class VisualisationDataService {
   fileToUpload = null;
   visualisationData = new Subject<any>();
   data2 = new Subject<any>();
+
   savefile(files): void {
     console.log('Saving original file');
+    console.log(files)
     this.dicomFileSerie.next(files);
   }
   load(imFile, singleFile): void {
