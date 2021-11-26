@@ -443,7 +443,7 @@ export class VtkManagerService {
                 picker.pick([pos.x, pos.y, 0], renderer);
 
                 const pickedPoint = picker.getPickPosition();
-                
+
                 circle.setCenter(pickedPoint);
                 circle.setRadius(2);
 
@@ -464,7 +464,6 @@ export class VtkManagerService {
                 });
 
                 this.viewsAndPoints[view.getName()].point = circleActor;
-                console.log("views and points: ", this.viewsAndPoints);
                 this.proxyManager.autoAnimateViews();
               }
 
