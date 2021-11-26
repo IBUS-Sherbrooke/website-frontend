@@ -53,6 +53,7 @@ export class SagittalVisualisationComponent implements OnInit {
   initializeView() {
     this.viewProxy = this.vtkManagerService.proxyManager.createProxy('Views', 'SagittalView');
     this.viewProxy.setContainer(this.sagittalDiv.nativeElement);
+    this.viewProxy.setName("SagittalView");
     this.viewProxy.getCornerAnnotation().updateTemplates({
       nw() { return `Sagittal`; }
     });

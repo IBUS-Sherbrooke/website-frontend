@@ -78,6 +78,7 @@ export class TridimensionalVisualisationComponent implements OnInit {
   initializeView(): void {
     this.viewProxy = this.vtkManagerService.proxyManager.createProxy('Views', 'View3D');
     this.viewProxy.setContainer(this.tridimensionalDiv.nativeElement);
+    this.viewProxy.setName("View3D");
     this.viewProxy.getCornerAnnotation().updateTemplates({
       nw() { return `3D`; }
     });

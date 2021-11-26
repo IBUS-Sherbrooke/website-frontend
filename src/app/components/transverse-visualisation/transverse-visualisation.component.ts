@@ -50,6 +50,7 @@ export class TransverseVisualisationComponent implements OnInit {
   initializeView() {
     this.viewProxy = this.vtkManagerService.proxyManager.createProxy('Views', 'TransverseView');
     this.viewProxy.setContainer(this.transverseDiv.nativeElement);
+    this.viewProxy.setName("TransverseView");
     this.viewProxy.getCornerAnnotation().updateTemplates({
       nw() { return `Transverse`; }
     });
