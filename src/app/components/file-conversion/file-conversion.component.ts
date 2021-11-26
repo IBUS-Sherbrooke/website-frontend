@@ -4,7 +4,7 @@ import { vtk_image_to_STL } from './vtk_image_to_STL';
 import { Subscription } from 'rxjs';
 import { PostDataService } from '../../services/post-data/post-data.service';
 import {saveAs} from 'file-saver';
-
+import { VtkManagerService } from '../../services/vtk-manager/vtk-manager.service';
 @Component({
   selector: 'app-file-conversion',
   templateUrl: './file-conversion.component.html',
@@ -15,19 +15,21 @@ export class FileConversionComponent implements OnInit {
   imgData: any;
   subscription: Subscription;
   vtkDataBlob: Blob;
-  constructor(private visualisationDataService: VisualisationDataService, private postDataService: PostDataService) { }
+  constructor(private visualisationDataService: VisualisationDataService, private postDataService: PostDataService, private vtkManagerService: VtkManagerService) { }
 
   ngOnInit(): void {
     // get data on upload (this should be changed to update data whenever it is changed through segmentation or other inputs)
-    this.subscription = this.visualisationDataService.getRawData()
-    .subscribe(imageData => {
-      this.imgData = imageData;
-    }),
-    error => {
-      console.log(error);
-    };
+    //this.subscription = this.visualisationDataService.getRawData()
+    //.subscribe(imageData => {
+    //  this.imgData = imageData;
+    //}),
+    //error => {
+    //  console.log(error);
+    //};
   }
   send_file(): void{
+    this.imgData=this.vtkManagerService.getData()
+    console.log(this.imgData)
   // This function converts the currently loaded VTK image into the stl format and
     this.vtkDataBlob = vtk_image_to_STL(this.imgData);
     console.log(this.vtkDataBlob);
@@ -36,6 +38,7 @@ export class FileConversionComponent implements OnInit {
 
   download_file(): void{
     // This function converts the currently loaded VTK image into the stl format and
+      this.imgData=this.vtkManagerService.getData()
       this.vtkDataBlob = vtk_image_to_STL(this.imgData);
       saveAs(this.vtkDataBlob, 'my_file.stl');
     }
