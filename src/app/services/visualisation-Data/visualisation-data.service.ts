@@ -24,23 +24,30 @@ export class VisualisationDataService {
   }
   load(imFile, singleFile): void {
     if (singleFile) {
-    readImageFile(null, imFile).then(image => {
-      const data = ITKHelper.convertItkToVtkImage(image.image);
-      this.visualisationData.next(data);
-      this.data2.next(data);
-    })
-    .then(() => {
-      if (this.dialogRef !== null) {
-        this.dialogRef.close();
-      }
-    });
+      this.openLoadingDialog();
+      readImageFile(null, imFile).then(image => {
+        const data = ITKHelper.convertItkToVtkImage(image.image);
+        this.visualisationData.next(data);
+        this.data2.next(data);
+      })
+      .finally(() => {
+        if (this.dialogRef !== null) {
+          this.dialogRef.close();
+        }
+      });
     }
     else {
-    readImageDICOMFileSeries(imFile).then(image => {
-       const data = ITKHelper.convertItkToVtkImage(image.image);
-       this.visualisationData.next(data);
-       this.data2.next(data);
-     });
+      this.openLoadingDialog();
+      readImageDICOMFileSeries(imFile).then(image => {
+         const data = ITKHelper.convertItkToVtkImage(image.image);
+         this.visualisationData.next(data);
+         this.data2.next(data);
+      })
+      .finally(() => {
+        if (this.dialogRef !== null) {
+          this.dialogRef.close();
+        }
+      });
     }
   }
   getFile(): Observable<any> {
@@ -56,6 +63,9 @@ export class VisualisationDataService {
 
   openLoadingDialog(): void {
     const dialogRef = this.dialog.open(LoadingModuleComponent, {
+      data: {
+        dialogTitle: "Loading images..."
+      },
       width: '300px'
     });
 

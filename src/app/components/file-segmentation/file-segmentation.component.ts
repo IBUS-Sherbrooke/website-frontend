@@ -5,6 +5,9 @@ import { Subscription } from 'rxjs';
 import { PostSegmentationService } from '../../services/post-segmentation/post-segmentation.service';
 import {saveAs} from 'file-saver';
 import { VtkManagerService } from '../../services/vtk-manager/vtk-manager.service';
+import { LoadingModuleComponent } from 'src/app/components/loading-module/loading-module.component';
+import { MatDialog } from '@angular/material/dialog';
+
 
 @Component({
   selector: 'app-file-segmentation',
@@ -16,7 +19,8 @@ export class FileSegmentationComponent implements OnInit {
   imgData: any;
   subscription: Subscription;
   vtkDataBlob: Blob;
-  constructor(private visualisationDataService: VisualisationDataService, private postSegmentationService: PostSegmentationService, private vtkManagerService: VtkManagerService ) { }
+  dialogRef = null;
+  constructor(private visualisationDataService: VisualisationDataService, private postSegmentationService: PostSegmentationService, private vtkManagerService: VtkManagerService, public dialog: MatDialog) { }
 
   ngOnInit(): void {
     // get data on upload (this should be changed to update data whenever it is changed through segmentation or other inputs)
@@ -42,9 +46,13 @@ export class FileSegmentationComponent implements OnInit {
   var x= this.vtkManagerService.get_x_coord()
   var y= this.vtkManagerService.get_y_coord()
   var z= this.vtkManagerService.get_z_coord()
+  this.openLoadingDialog();
   this.postSegmentationService.getSegmentation(base64data,x,y,z)
     .subscribe(data =>
       {
+        if (this.dialogRef !== null) {
+          this.dialogRef.close();
+        }
         saveAs(data, 'my_segmentation.nrrd');
         console.log(data); }
         , error => {
@@ -63,5 +71,15 @@ export class FileSegmentationComponent implements OnInit {
   };
 }
 
+  openLoadingDialog(): void {
+    const dialogRef = this.dialog.open(LoadingModuleComponent, {
+      data: {
+        dialogTitle: "Segmenting..."
+      },
+      width: '300px'
+    });
+
+    this.dialogRef = dialogRef;
+  }
 }
 
