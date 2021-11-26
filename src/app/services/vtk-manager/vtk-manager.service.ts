@@ -442,7 +442,7 @@ export class VtkManagerService {
                  console.log(pos.y)
                  const circle = vtkSphereSource.newInstance();
                  const picker = vtkPointPicker.newInstance();
-                 picker.pick([pos.x, pos.y-15, 0], renderer);
+                 picker.pick([pos.x, pos.y, 0], renderer);
                  const pickedPoint = picker.getPickPosition();
                  circle.setCenter(pickedPoint);
                  circle.setRadius(2);
