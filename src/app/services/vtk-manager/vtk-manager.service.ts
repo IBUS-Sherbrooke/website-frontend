@@ -37,6 +37,10 @@ export class VtkManagerService {
   window = new Subject<any>();
   dataSubject = new Subject<any>();
   extent: any;
+  x_segment_coord : number;
+  y_segment_coord :  number;
+  z_segment_coord : number;
+  imgData= new Subject<any>();
   constructor(private visualisationDataService: VisualisationDataService) {
     const proxyConfiguration = {
       definitions: {
@@ -218,6 +222,12 @@ export class VtkManagerService {
 
       return true;
     };
+    const subscription = this.visualisationDataService.getFile().subscribe(imageData => {
+      console.log("subscribed:",imageData)
+      this.imgData = imageData;
+      //this.imgData=JSON.parse(JSON.stringify(imageData))
+
+    })
 
     const dataTest = this.visualisationDataService.getData().subscribe(imageData => {
       this.proxySource.setInputData(imageData);
@@ -440,7 +450,12 @@ export class VtkManagerService {
                 // renderer.addActor(circleActor);
                 // this.proxyManager.autoAnimateViews();
               }
-
+              this.x_segment_coord=pixelValue.location[0]
+              this.y_segment_coord=pixelValue.location[1]
+              this.z_segment_coord=pixelValue.location[2]
+              console.log("x:",this.x_segment_coord);
+              console.log("y:",this.y_segment_coord);
+              console.log("z:",this.z_segment_coord);
               console.log("Picked point: ", pixelValue);
             }
           }          
@@ -487,4 +502,18 @@ export class VtkManagerService {
   getWindow(): any {
     return this.window.asObservable();
   }
+
+  get_x_coord(): any {
+    return this.x_segment_coord;
+  }
+  get_y_coord(): any {
+    return this.y_segment_coord;
+  }
+  get_z_coord(): any {
+    return this.z_segment_coord;
+  }
+  getFile(): any {
+    return this.imgData;
+  }
+
 }
