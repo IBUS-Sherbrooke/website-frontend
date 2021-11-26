@@ -51,6 +51,7 @@ export class CoronalVisualisationComponent implements OnInit{
   initializeView() {
     this.viewProxy = this.vtkManagerService.proxyManager.createProxy('Views', 'CoronalView');
     this.viewProxy.setContainer(this.coronalDiv.nativeElement);
+    this.viewProxy.setName("CoronalView");
     this.viewProxy.getCornerAnnotation().updateTemplates({
       nw() { return `Coronal`; }
     });

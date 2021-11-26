@@ -31,6 +31,7 @@ export class VtkManagerService {
   isPickerEnabled: boolean = false;
   proxyManager: any;
   proxySource: any;
+  viewsAndPoints = {};
   piecewiseFunctionProxy: any;
   lastWindowLevel: number;
   lastWindowWidth: number;
@@ -414,10 +415,10 @@ export class VtkManagerService {
 
     views.forEach((view: any) => {
       const renderer = view.getRenderer();
-
       const rep = view.getRepresentations()[0];
 
       if (rep && !rep.getVolumes().length) {
+        this.viewsAndPoints[view.getName()] = {view, point: null};
         foundRep = true;
         const image = rep.getMapper().getInputData();
         const gl = view.getOpenglRenderWindow();
@@ -440,24 +441,35 @@ export class VtkManagerService {
                 const circle = vtkSphereSource.newInstance();
                 const picker = vtkPointPicker.newInstance();
                 picker.pick([pos.x, pos.y, 0], renderer);
+
                 const pickedPoint = picker.getPickPosition();
+
                 circle.setCenter(pickedPoint);
                 circle.setRadius(2);
+
                 const circleMapper = vtkMapper.newInstance();
                 circleMapper.setInputData(circle.getOutputData());
+
                 const circleActor = vtkActor.newInstance();
                 circleActor.setMapper(circleMapper);
                 circleActor.getProperty().setColor(1.0, 0.0, 0.0);
+
                 renderer.addActor(circleActor);
+
+                Object.values(this.viewsAndPoints).forEach((viewAndPoint: any) => {
+                  if (viewAndPoint.point !== null) {
+                    viewAndPoint.view.getRenderer().removeActor(viewAndPoint.point);
+                    viewAndPoint.point = null;
+                  }
+                });
+
+                this.viewsAndPoints[view.getName()].point = circleActor;
                 this.proxyManager.autoAnimateViews();
               }
+
               this.x_segment_coord=pixelValue.location[0]
               this.y_segment_coord=pixelValue.location[1]
               this.z_segment_coord=pixelValue.location[2]
-              console.log("x:",this.x_segment_coord);
-              console.log("y:",this.y_segment_coord);
-              console.log("z:",this.z_segment_coord);
-              console.log("Picked point: ", pixelValue);
             }
           }          
         });
